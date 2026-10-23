@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Le Guide du musée dans ta poche · Petits Artistes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fffdf6;--paper:#ffffff;--ink:#1e2a4a;--ink-soft:#55607a;--accent:#1e2a6e;--accent-dark:#1e2a4a;--line:#e8d6a8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:'Nunito',-apple-system,Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:96px}
+.top{background:var(--accent-dark);color:var(--paper);text-align:center;padding:11px 16px;font-family:'Fredoka',Georgia,serif;font-weight:700;font-size:15px}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 32px}
+.head{text-align:center;margin-bottom:18px}
+.kicker{display:inline-block;background:var(--accent);color:var(--paper);padding:6px 14px;border-radius:99px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+h1{font-family:'Fredoka',Georgia,serif;font-size:clamp(26px,6vw,38px);line-height:1.15;margin-bottom:10px}
+.sub{color:var(--ink-soft);font-size:17px;max-width:600px;margin:0 auto 16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:12px 22px;border-radius:12px;font-weight:800;font-size:16px;text-decoration:none;background:var(--accent);color:var(--paper);box-shadow:0 4px 0 var(--accent-dark)}
+.pasos{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:18px 0;display:grid;gap:10px}
+.pasos h2{font-family:'Fredoka',Georgia,serif;font-size:19px}
+.paso{display:flex;gap:12px;align-items:flex-start;font-size:16px}
+.paso b{flex:0 0 28px;height:28px;border-radius:50%;background:var(--accent);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:14px}
+.buscar{display:flex;gap:10px;align-items:center;margin:6px 0 14px}
+.buscar label{font-weight:800;font-size:15px}
+.buscar input{flex:1;min-width:0;height:48px;border:2px solid var(--line);border-radius:12px;padding:0 14px;font-size:18px;font-family:inherit;color:var(--ink);background:var(--paper)}
+ol{list-style:none;display:grid;gap:8px}
+.pista{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:8px 10px}
+.pista.activa{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.num{flex:0 0 38px;height:38px;border-radius:50%;background:#f4ead0;color:var(--accent);font-family:'Fredoka',Georgia,serif;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center}
+.pista img{flex:0 0 56px;width:56px;height:56px;border-radius:10px;object-fit:cover}
+.info{flex:1;min-width:0;display:flex;flex-direction:column}
+.info b{font-size:15px;line-height:1.25;overflow:hidden;text-overflow:ellipsis}
+.info small{color:var(--ink-soft);font-size:13px}
+.play{flex:0 0 48px;height:48px;border-radius:50%;border:0;background:var(--accent);color:var(--paper);font-size:18px;cursor:pointer;box-shadow:0 3px 0 var(--accent-dark)}
+.dl{flex:0 0 32px;text-align:center;color:var(--ink-soft);text-decoration:none;font-size:18px}
+.prochaine{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:22px}
+.prochaine h2{font-family:'Fredoka',Georgia,serif;font-size:19px;margin-bottom:6px}
+.foot{text-align:center;color:var(--ink-soft);font-size:13px;margin-top:22px}
+.lecteur{position:fixed;left:0;right:0;bottom:0;background:var(--accent-dark);color:var(--paper);padding:10px 14px;display:none;z-index:9}
+.lecteur.on{display:block}
+.lecteur .fila{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.lecteur button{flex:0 0 44px;height:44px;border-radius:50%;border:0;background:var(--paper);color:var(--accent-dark);font-size:17px;cursor:pointer}
+.lecteur .t{flex:1;min-width:0}
+.lecteur .t b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lecteur input[type=range]{width:100%;accent-color:#f2c94c}
+</style>
+</head>
+<body>
+<div class="top">Petits Artistes</div>
+<main class="wrap">
+  <div class="head">
+    <span class="kicker">Inclus dans ta commande</span>
+    <h1>Le Guide du musée dans ta poche</h1>
+    <p class="sub">100 pistes audio, une par tableau du livre. Ton enfant écoute l'histoire du tableau, puis une voix lui dit les couleurs une par une.</p>
+    <a class="btn" href="guide-du-musee-dans-ta-poche.zip" download>⬇ Télécharger les 100 pistes (64 Mo)</a>
+  </div>
+  <section class="pasos">
+    <h2>Comment ça marche</h2>
+    <div class="paso"><b>1</b><span>Ouvre le livre au tableau que ton enfant veut colorier.</span></div>
+    <div class="paso"><b>2</b><span>Cherche son numéro ici : c'est le numéro en haut à gauche de la fiche.</span></div>
+    <div class="paso"><b>3</b><span>Appuie sur ▶ et pose le téléphone. Il écoute, il colorie.</span></div>
+  </section>
+  <div class="buscar"><label for="q">Tableau n°</label><input id="q" type="number" inputmode="numeric" min="1" max="100" placeholder="ex. 70"></div>
+  <ol id="lista">
+<li class="pista" id="t1" data-n="1" data-src="audio/001-saint-francois-oiseaux.mp3" data-titre="Saint François prêche aux oiseaux">
+  <span class="num">1</span><img src="img/001.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Saint François prêche aux oiseaux</b><small>Giotto</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 1">▶</button>
+  <a class="dl" href="audio/001-saint-francois-oiseaux.mp3" download aria-label="Télécharger la piste 1">⬇</a>
+</li>
+<li class="pista" id="t2" data-n="2" data-src="audio/002-fuite-egypte.mp3" data-titre="La Fuite en Égypte">
+  <span class="num">2</span><img src="img/002.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Fuite en Égypte</b><small>Giotto</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 2">▶</button>
+  <a class="dl" href="audio/002-fuite-egypte.mp3" download aria-label="Télécharger la piste 2">⬇</a>
+</li>
+<li class="pista" id="t3" data-n="3" data-src="audio/003-adoration-mages.mp3" data-titre="L&#x27;Adoration des mages">
+  <span class="num">3</span><img src="img/003.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>L&#x27;Adoration des mages</b><small>Giotto</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 3">▶</button>
+  <a class="dl" href="audio/003-adoration-mages.mp3" download aria-label="Télécharger la piste 3">⬇</a>
+</li>
+<li class="pista" id="t4" data-n="4" data-src="audio/004-annonciation-angelico.mp3" data-titre="L&#x27;Annonciation">
+  <span class="num">4</span><img src="img/004.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>L&#x27;Annonciation</b><small>Fra Angelico</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 4">▶</button>
+  <a class="dl" href="audio/004-annonciation-angelico.mp3" download aria-label="Télécharger la piste 4">⬇</a>
+</li>
+<li class="pista" id="t5" data-n="5" data-src="audio/005-bapteme-christ.mp3" data-titre="Le Baptême du Christ">
+  <span class="num">5</span><img src="img/005.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Baptême du Christ</b><small>Piero della Francesca</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 5">▶</button>
+  <a class="dl" href="audio/005-bapteme-christ.mp3" download aria-label="Télécharger la piste 5">⬇</a>
+</li>
+<li class="pista" id="t6" data-n="6" data-src="audio/006-annonciation-leonard.mp3" data-titre="L&#x27;Annonciation">
+  <span class="num">6</span><img src="img/006.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>L&#x27;Annonciation</b><small>Léonard de Vinci</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 6">▶</button>
+  <a class="dl" href="audio/006-annonciation-leonard.mp3" download aria-label="Télécharger la piste 6">⬇</a>
+</li>
+<li class="pista" id="t7" data-n="7" data-src="audio/007-printemps-botticelli.mp3" data-titre="Le Printemps">
+  <span class="num">7</span><img src="img/007.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Printemps</b><small>Sandro Botticelli</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 7">▶</button>
+  <a class="dl" href="audio/007-printemps-botticelli.mp3" download aria-label="Télécharger la piste 7">⬇</a>
+</li>
+<li class="pista" id="t8" data-n="8" data-src="audio/008-remise-cles.mp3" data-titre="La Remise des clés">
+  <span class="num">8</span><img src="img/008.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Remise des clés</b><small>Le Pérugin</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 8">▶</button>
+  <a class="dl" href="audio/008-remise-cles.mp3" download aria-label="Télécharger la piste 8">⬇</a>
+</li>
+<li class="pista" id="t9" data-n="9" data-src="audio/009-dame-hermine.mp3" data-titre="La Dame à l&#x27;hermine">
+  <span class="num">9</span><img src="img/009.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Dame à l&#x27;hermine</b><small>Léonard de Vinci</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 9">▶</button>
+  <a class="dl" href="audio/009-dame-hermine.mp3" download aria-label="Télécharger la piste 9">⬇</a>
+</li>
+<li class="pista" id="t10" data-n="10" data-src="audio/010-lievre-durer.mp3" data-titre="Le Lièvre">
+  <span class="num">10</span><img src="img/010.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Lièvre</b><small>Albrecht Dürer</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 10">▶</button>
+  <a class="dl" href="audio/010-lievre-durer.mp3" download aria-label="Télécharger la piste 10">⬇</a>
+</li>
+<li class="pista" id="t11" data-n="11" data-src="audio/011-joconde.mp3" data-titre="La Joconde">
+  <span class="num">11</span><img src="img/011.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Joconde</b><small>Léonard de Vinci</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 11">▶</button>
+  <a class="dl" href="audio/011-joconde.mp3" download aria-label="Télécharger la piste 11">⬇</a>
+</li>
+<li class="pista" id="t12" data-n="12" data-src="audio/012-rhinoceros.mp3" data-titre="Le Rhinocéros">
+  <span class="num">12</span><img src="img/012.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Rhinocéros</b><small>Albrecht Dürer</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 12">▶</button>
+  <a class="dl" href="audio/012-rhinoceros.mp3" download aria-label="Télécharger la piste 12">⬇</a>
+</li>
+<li class="pista" id="t13" data-n="13" data-src="audio/013-charles-quint.mp3" data-titre="Charles Quint à cheval">
+  <span class="num">13</span><img src="img/013.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Charles Quint à cheval</b><small>Titien</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 13">▶</button>
+  <a class="dl" href="audio/013-charles-quint.mp3" download aria-label="Télécharger la piste 13">⬇</a>
+</li>
+<li class="pista" id="t14" data-n="14" data-src="audio/014-tour-babel.mp3" data-titre="La Tour de Babel">
+  <span class="num">14</span><img src="img/014.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Tour de Babel</b><small>Pieter Bruegel l&#x27;Ancien</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 14">▶</button>
+  <a class="dl" href="audio/014-tour-babel.mp3" download aria-label="Télécharger la piste 14">⬇</a>
+</li>
+<li class="pista" id="t15" data-n="15" data-src="audio/015-noces-cana.mp3" data-titre="Les Noces de Cana">
+  <span class="num">15</span><img src="img/015.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Noces de Cana</b><small>Paul Véronèse</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 15">▶</button>
+  <a class="dl" href="audio/015-noces-cana.mp3" download aria-label="Télécharger la piste 15">⬇</a>
+</li>
+<li class="pista" id="t16" data-n="16" data-src="audio/016-chasseurs-neige.mp3" data-titre="Les Chasseurs dans la neige">
+  <span class="num">16</span><img src="img/016.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Chasseurs dans la neige</b><small>Pieter Bruegel l&#x27;Ancien</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 16">▶</button>
+  <a class="dl" href="audio/016-chasseurs-neige.mp3" download aria-label="Télécharger la piste 16">⬇</a>
+</li>
+<li class="pista" id="t17" data-n="17" data-src="audio/017-ete-arcimboldo.mp3" data-titre="L&#x27;Été">
+  <span class="num">17</span><img src="img/017.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>L&#x27;Été</b><small>Giuseppe Arcimboldo</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 17">▶</button>
+  <a class="dl" href="audio/017-ete-arcimboldo.mp3" download aria-label="Télécharger la piste 17">⬇</a>
+</li>
+<li class="pista" id="t18" data-n="18" data-src="audio/018-corbeille-fruits.mp3" data-titre="Corbeille de fruits">
+  <span class="num">18</span><img src="img/018.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Corbeille de fruits</b><small>Caravage</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 18">▶</button>
+  <a class="dl" href="audio/018-corbeille-fruits.mp3" download aria-label="Télécharger la piste 18">⬇</a>
+</li>
+<li class="pista" id="t19" data-n="19" data-src="audio/019-patineurs-avercamp.mp3" data-titre="Paysage d&#x27;hiver avec patineurs">
+  <span class="num">19</span><img src="img/019.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Paysage d&#x27;hiver avec patineurs</b><small>Hendrick Avercamp</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 19">▶</button>
+  <a class="dl" href="audio/019-patineurs-avercamp.mp3" download aria-label="Télécharger la piste 19">⬇</a>
+</li>
+<li class="pista" id="t20" data-n="20" data-src="audio/020-laitiere.mp3" data-titre="La Laitière">
+  <span class="num">20</span><img src="img/020.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Laitière</b><small>Johannes Vermeer</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 20">▶</button>
+  <a class="dl" href="audio/020-laitiere.mp3" download aria-label="Télécharger la piste 20">⬇</a>
+</li>
+<li class="pista" id="t21" data-n="21" data-src="audio/021-cour-delft.mp3" data-titre="La Cour d&#x27;une maison à Delft">
+  <span class="num">21</span><img src="img/021.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Cour d&#x27;une maison à Delft</b><small>Pieter de Hooch</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 21">▶</button>
+  <a class="dl" href="audio/021-cour-delft.mp3" download aria-label="Télécharger la piste 21">⬇</a>
+</li>
+<li class="pista" id="t22" data-n="22" data-src="audio/022-jeune-fille-perle.mp3" data-titre="La Jeune Fille à la perle">
+  <span class="num">22</span><img src="img/022.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Jeune Fille à la perle</b><small>Johannes Vermeer</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 22">▶</button>
+  <a class="dl" href="audio/022-jeune-fille-perle.mp3" download aria-label="Télécharger la piste 22">⬇</a>
+</li>
+<li class="pista" id="t23" data-n="23" data-src="audio/023-place-saint-marc.mp3" data-titre="La Place Saint-Marc">
+  <span class="num">23</span><img src="img/023.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Place Saint-Marc</b><small>Canaletto</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 23">▶</button>
+  <a class="dl" href="audio/023-place-saint-marc.mp3" download aria-label="Télécharger la piste 23">⬇</a>
+</li>
+<li class="pista" id="t24" data-n="24" data-src="audio/024-retour-bucentaure.mp3" data-titre="Le Retour du Bucentaure">
+  <span class="num">24</span><img src="img/024.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Retour du Bucentaure</b><small>Canaletto</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 24">▶</button>
+  <a class="dl" href="audio/024-retour-bucentaure.mp3" download aria-label="Télécharger la piste 24">⬇</a>
+</li>
+<li class="pista" id="t25" data-n="25" data-src="audio/025-salute.mp3" data-titre="Le Grand Canal et la Salute">
+  <span class="num">25</span><img src="img/025.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Grand Canal et la Salute</b><small>Canaletto</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 25">▶</button>
+  <a class="dl" href="audio/025-salute.mp3" download aria-label="Télécharger la piste 25">⬇</a>
+</li>
+<li class="pista" id="t26" data-n="26" data-src="audio/026-bulles-savon.mp3" data-titre="Les Bulles de savon">
+  <span class="num">26</span><img src="img/026.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Bulles de savon</b><small>Jean Siméon Chardin</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 26">▶</button>
+  <a class="dl" href="audio/026-bulles-savon.mp3" download aria-label="Télécharger la piste 26">⬇</a>
+</li>
+<li class="pista" id="t27" data-n="27" data-src="audio/027-chateau-cartes.mp3" data-titre="Le Château de cartes">
+  <span class="num">27</span><img src="img/027.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Château de cartes</b><small>Jean Siméon Chardin</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 27">▶</button>
+  <a class="dl" href="audio/027-chateau-cartes.mp3" download aria-label="Télécharger la piste 27">⬇</a>
+</li>
+<li class="pista" id="t28" data-n="28" data-src="audio/028-regate-grand-canal.mp3" data-titre="Régate sur le Grand Canal">
+  <span class="num">28</span><img src="img/028.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Régate sur le Grand Canal</b><small>Canaletto</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 28">▶</button>
+  <a class="dl" href="audio/028-regate-grand-canal.mp3" download aria-label="Télécharger la piste 28">⬇</a>
+</li>
+<li class="pista" id="t29" data-n="29" data-src="audio/029-tamise-londres.mp3" data-titre="La Tamise à Londres">
+  <span class="num">29</span><img src="img/029.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Tamise à Londres</b><small>Canaletto</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 29">▶</button>
+  <a class="dl" href="audio/029-tamise-londres.mp3" download aria-label="Télécharger la piste 29">⬇</a>
+</li>
+<li class="pista" id="t30" data-n="30" data-src="audio/030-whistlejacket.mp3" data-titre="Whistlejacket">
+  <span class="num">30</span><img src="img/030.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Whistlejacket</b><small>George Stubbs</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 30">▶</button>
+  <a class="dl" href="audio/030-whistlejacket.mp3" download aria-label="Télécharger la piste 30">⬇</a>
+</li>
+<li class="pista" id="t31" data-n="31" data-src="audio/031-garcon-bleu.mp3" data-titre="Le Garçon en bleu">
+  <span class="num">31</span><img src="img/031.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Garçon en bleu</b><small>Thomas Gainsborough</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 31">▶</button>
+  <a class="dl" href="audio/031-garcon-bleu.mp3" download aria-label="Télécharger la piste 31">⬇</a>
+</li>
+<li class="pista" id="t32" data-n="32" data-src="audio/032-mer-nuages.mp3" data-titre="Le Voyageur contemplant une mer de nuages">
+  <span class="num">32</span><img src="img/032.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Voyageur contemplant une mer de nuages</b><small>Caspar David Friedrich</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 32">▶</button>
+  <a class="dl" href="audio/032-mer-nuages.mp3" download aria-label="Télécharger la piste 32">⬇</a>
+</li>
+<li class="pista" id="t33" data-n="33" data-src="audio/033-charrette-foin.mp3" data-titre="La Charrette de foin">
+  <span class="num">33</span><img src="img/033.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Charrette de foin</b><small>John Constable</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 33">▶</button>
+  <a class="dl" href="audio/033-charrette-foin.mp3" download aria-label="Télécharger la piste 33">⬇</a>
+</li>
+<li class="pista" id="t34" data-n="34" data-src="audio/034-fuji-rouge.mp3" data-titre="Le Fuji rouge">
+  <span class="num">34</span><img src="img/034.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Fuji rouge</b><small>Katsushika Hokusai</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 34">▶</button>
+  <a class="dl" href="audio/034-fuji-rouge.mp3" download aria-label="Télécharger la piste 34">⬇</a>
+</li>
+<li class="pista" id="t35" data-n="35" data-src="audio/035-grande-vague.mp3" data-titre="La Grande Vague">
+  <span class="num">35</span><img src="img/035.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Grande Vague</b><small>Katsushika Hokusai</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 35">▶</button>
+  <a class="dl" href="audio/035-grande-vague.mp3" download aria-label="Télécharger la piste 35">⬇</a>
+</li>
+<li class="pista" id="t36" data-n="36" data-src="audio/036-oxbow.mp3" data-titre="La Boucle de la rivière">
+  <span class="num">36</span><img src="img/036.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Boucle de la rivière</b><small>Thomas Cole</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 36">▶</button>
+  <a class="dl" href="audio/036-oxbow.mp3" download aria-label="Télécharger la piste 36">⬇</a>
+</li>
+<li class="pista" id="t37" data-n="37" data-src="audio/037-temeraire.mp3" data-titre="Le Dernier Voyage du Téméraire">
+  <span class="num">37</span><img src="img/037.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Dernier Voyage du Téméraire</b><small>William Turner</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 37">▶</button>
+  <a class="dl" href="audio/037-temeraire.mp3" download aria-label="Télécharger la piste 37">⬇</a>
+</li>
+<li class="pista" id="t38" data-n="38" data-src="audio/038-pluie-vapeur.mp3" data-titre="Pluie, vapeur et vitesse">
+  <span class="num">38</span><img src="img/038.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Pluie, vapeur et vitesse</b><small>William Turner</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 38">▶</button>
+  <a class="dl" href="audio/038-pluie-vapeur.mp3" download aria-label="Télécharger la piste 38">⬇</a>
+</li>
+<li class="pista" id="t39" data-n="39" data-src="audio/039-monarque-glen.mp3" data-titre="Le Monarque du glen">
+  <span class="num">39</span><img src="img/039.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Monarque du glen</b><small>Edwin Landseer</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 39">▶</button>
+  <a class="dl" href="audio/039-monarque-glen.mp3" download aria-label="Télécharger la piste 39">⬇</a>
+</li>
+<li class="pista" id="t40" data-n="40" data-src="audio/040-bonjour-courbet.mp3" data-titre="Bonjour Monsieur Courbet">
+  <span class="num">40</span><img src="img/040.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Bonjour Monsieur Courbet</b><small>Gustave Courbet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 40">▶</button>
+  <a class="dl" href="audio/040-bonjour-courbet.mp3" download aria-label="Télécharger la piste 40">⬇</a>
+</li>
+<li class="pista" id="t41" data-n="41" data-src="audio/041-averse-ohashi.mp3" data-titre="Averse soudaine sur le pont Ohashi">
+  <span class="num">41</span><img src="img/041.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Averse soudaine sur le pont Ohashi</b><small>Utagawa Hiroshige</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 41">▶</button>
+  <a class="dl" href="audio/041-averse-ohashi.mp3" download aria-label="Télécharger la piste 41">⬇</a>
+</li>
+<li class="pista" id="t42" data-n="42" data-src="audio/042-pruniers-kameido.mp3" data-titre="Le Jardin des pruniers à Kameido">
+  <span class="num">42</span><img src="img/042.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Jardin des pruniers à Kameido</b><small>Utagawa Hiroshige</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 42">▶</button>
+  <a class="dl" href="audio/042-pruniers-kameido.mp3" download aria-label="Télécharger la piste 42">⬇</a>
+</li>
+<li class="pista" id="t43" data-n="43" data-src="audio/043-glaneuses.mp3" data-titre="Des glaneuses">
+  <span class="num">43</span><img src="img/043.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Des glaneuses</b><small>Jean-François Millet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 43">▶</button>
+  <a class="dl" href="audio/043-glaneuses.mp3" download aria-label="Télécharger la piste 43">⬇</a>
+</li>
+<li class="pista" id="t44" data-n="44" data-src="audio/044-chutes-niagara.mp3" data-titre="Les Chutes du Niagara">
+  <span class="num">44</span><img src="img/044.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Chutes du Niagara</b><small>Frederic Edwin Church</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 44">▶</button>
+  <a class="dl" href="audio/044-chutes-niagara.mp3" download aria-label="Télécharger la piste 44">⬇</a>
+</li>
+<li class="pista" id="t45" data-n="45" data-src="audio/045-mortefontaine.mp3" data-titre="Souvenir de Mortefontaine">
+  <span class="num">45</span><img src="img/045.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Souvenir de Mortefontaine</b><small>Camille Corot</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 45">▶</button>
+  <a class="dl" href="audio/045-mortefontaine.mp3" download aria-label="Télécharger la piste 45">⬇</a>
+</li>
+<li class="pista" id="t46" data-n="46" data-src="audio/046-plage-trouville.mp3" data-titre="La Plage de Trouville">
+  <span class="num">46</span><img src="img/046.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Plage de Trouville</b><small>Eugène Boudin</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 46">▶</button>
+  <a class="dl" href="audio/046-plage-trouville.mp3" download aria-label="Télécharger la piste 46">⬇</a>
+</li>
+<li class="pista" id="t47" data-n="47" data-src="audio/047-le-fifre.mp3" data-titre="Le Fifre">
+  <span class="num">47</span><img src="img/047.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Fifre</b><small>Édouard Manet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 47">▶</button>
+  <a class="dl" href="audio/047-le-fifre.mp3" download aria-label="Télécharger la piste 47">⬇</a>
+</li>
+<li class="pista" id="t48" data-n="48" data-src="audio/048-sierra-nevada.mp3" data-titre="Parmi les montagnes de la Sierra Nevada">
+  <span class="num">48</span><img src="img/048.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Parmi les montagnes de la Sierra Nevada</b><small>Albert Bierstadt</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 48">▶</button>
+  <a class="dl" href="audio/048-sierra-nevada.mp3" download aria-label="Télécharger la piste 48">⬇</a>
+</li>
+<li class="pista" id="t49" data-n="49" data-src="audio/049-la-pie.mp3" data-titre="La Pie">
+  <span class="num">49</span><img src="img/049.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Pie</b><small>Claude Monet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 49">▶</button>
+  <a class="dl" href="audio/049-la-pie.mp3" download aria-label="Télécharger la piste 49">⬇</a>
+</li>
+<li class="pista" id="t50" data-n="50" data-src="audio/050-mere-artiste.mp3" data-titre="La Mère de l&#x27;artiste">
+  <span class="num">50</span><img src="img/050.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Mère de l&#x27;artiste</b><small>James McNeill Whistler</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 50">▶</button>
+  <a class="dl" href="audio/050-mere-artiste.mp3" download aria-label="Télécharger la piste 50">⬇</a>
+</li>
+<li class="pista" id="t51" data-n="51" data-src="audio/051-impression-soleil.mp3" data-titre="Impression, soleil levant">
+  <span class="num">51</span><img src="img/051.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Impression, soleil levant</b><small>Claude Monet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 51">▶</button>
+  <a class="dl" href="audio/051-impression-soleil.mp3" download aria-label="Télécharger la piste 51">⬇</a>
+</li>
+<li class="pista" id="t52" data-n="52" data-src="audio/052-le-berceau.mp3" data-titre="Le Berceau">
+  <span class="num">52</span><img src="img/052.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Berceau</b><small>Berthe Morisot</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 52">▶</button>
+  <a class="dl" href="audio/052-le-berceau.mp3" download aria-label="Télécharger la piste 52">⬇</a>
+</li>
+<li class="pista" id="t53" data-n="53" data-src="audio/053-snap-the-whip.mp3" data-titre="Le Jeu de la chaîne">
+  <span class="num">53</span><img src="img/053.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Jeu de la chaîne</b><small>Winslow Homer</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 53">▶</button>
+  <a class="dl" href="audio/053-snap-the-whip.mp3" download aria-label="Télécharger la piste 53">⬇</a>
+</li>
+<li class="pista" id="t54" data-n="54" data-src="audio/054-coquelicots.mp3" data-titre="Les Coquelicots">
+  <span class="num">54</span><img src="img/054.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Coquelicots</b><small>Claude Monet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 54">▶</button>
+  <a class="dl" href="audio/054-coquelicots.mp3" download aria-label="Télécharger la piste 54">⬇</a>
+</li>
+<li class="pista" id="t55" data-n="55" data-src="audio/055-classe-danse.mp3" data-titre="La Classe de danse">
+  <span class="num">55</span><img src="img/055.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Classe de danse</b><small>Edgar Degas</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 55">▶</button>
+  <a class="dl" href="audio/055-classe-danse.mp3" download aria-label="Télécharger la piste 55">⬇</a>
+</li>
+<li class="pista" id="t56" data-n="56" data-src="audio/056-chasse-papillons.mp3" data-titre="La Chasse aux papillons">
+  <span class="num">56</span><img src="img/056.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Chasse aux papillons</b><small>Berthe Morisot</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 56">▶</button>
+  <a class="dl" href="audio/056-chasse-papillons.mp3" download aria-label="Télécharger la piste 56">⬇</a>
+</li>
+<li class="pista" id="t57" data-n="57" data-src="audio/057-femme-ombrelle.mp3" data-titre="La Femme à l&#x27;ombrelle">
+  <span class="num">57</span><img src="img/057.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Femme à l&#x27;ombrelle</b><small>Claude Monet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 57">▶</button>
+  <a class="dl" href="audio/057-femme-ombrelle.mp3" download aria-label="Télécharger la piste 57">⬇</a>
+</li>
+<li class="pista" id="t58" data-n="58" data-src="audio/058-moulin-galette.mp3" data-titre="Bal du moulin de la Galette">
+  <span class="num">58</span><img src="img/058.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Bal du moulin de la Galette</b><small>Pierre-Auguste Renoir</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 58">▶</button>
+  <a class="dl" href="audio/058-moulin-galette.mp3" download aria-label="Télécharger la piste 58">⬇</a>
+</li>
+<li class="pista" id="t59" data-n="59" data-src="audio/059-inondation-marly.mp3" data-titre="L&#x27;Inondation à Port-Marly">
+  <span class="num">59</span><img src="img/059.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>L&#x27;Inondation à Port-Marly</b><small>Alfred Sisley</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 59">▶</button>
+  <a class="dl" href="audio/059-inondation-marly.mp3" download aria-label="Télécharger la piste 59">⬇</a>
+</li>
+<li class="pista" id="t60" data-n="60" data-src="audio/060-rue-paris-pluie.mp3" data-titre="Rue de Paris, temps de pluie">
+  <span class="num">60</span><img src="img/060.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Rue de Paris, temps de pluie</b><small>Gustave Caillebotte</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 60">▶</button>
+  <a class="dl" href="audio/060-rue-paris-pluie.mp3" download aria-label="Télécharger la piste 60">⬇</a>
+</li>
+<li class="pista" id="t61" data-n="61" data-src="audio/061-fauteuil-bleu.mp3" data-titre="Petite Fille dans un fauteuil bleu">
+  <span class="num">61</span><img src="img/061.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Petite Fille dans un fauteuil bleu</b><small>Mary Cassatt</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 61">▶</button>
+  <a class="dl" href="audio/061-fauteuil-bleu.mp3" download aria-label="Télécharger la piste 61">⬇</a>
+</li>
+<li class="pista" id="t62" data-n="62" data-src="audio/062-escalier-or.mp3" data-titre="L&#x27;Escalier d&#x27;or">
+  <span class="num">62</span><img src="img/062.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>L&#x27;Escalier d&#x27;or</b><small>Edward Burne-Jones</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 62">▶</button>
+  <a class="dl" href="audio/062-escalier-or.mp3" download aria-label="Télécharger la piste 62">⬇</a>
+</li>
+<li class="pista" id="t63" data-n="63" data-src="audio/063-dejeuner-canotiers.mp3" data-titre="Le Déjeuner des canotiers">
+  <span class="num">63</span><img src="img/063.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Déjeuner des canotiers</b><small>Pierre-Auguste Renoir</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 63">▶</button>
+  <a class="dl" href="audio/063-dejeuner-canotiers.mp3" download aria-label="Télécharger la piste 63">⬇</a>
+</li>
+<li class="pista" id="t64" data-n="64" data-src="audio/064-grande-jatte.mp3" data-titre="Un dimanche à la Grande Jatte">
+  <span class="num">64</span><img src="img/064.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Un dimanche à la Grande Jatte</b><small>Georges Seurat</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 64">▶</button>
+  <a class="dl" href="audio/064-grande-jatte.mp3" download aria-label="Télécharger la piste 64">⬇</a>
+</li>
+<li class="pista" id="t65" data-n="65" data-src="audio/065-jeune-bergere.mp3" data-titre="La Jeune Bergère">
+  <span class="num">65</span><img src="img/065.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Jeune Bergère</b><small>William Bouguereau</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 65">▶</button>
+  <a class="dl" href="audio/065-jeune-bergere.mp3" download aria-label="Télécharger la piste 65">⬇</a>
+</li>
+<li class="pista" id="t66" data-n="66" data-src="audio/066-carnation-lily.mp3" data-titre="Œillet, lis, lis, rose">
+  <span class="num">66</span><img src="img/066.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Œillet, lis, lis, rose</b><small>John Singer Sargent</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 66">▶</button>
+  <a class="dl" href="audio/066-carnation-lily.mp3" download aria-label="Télécharger la piste 66">⬇</a>
+</li>
+<li class="pista" id="t67" data-n="67" data-src="audio/067-tournesols.mp3" data-titre="Les Tournesols">
+  <span class="num">67</span><img src="img/067.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Tournesols</b><small>Vincent van Gogh</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 67">▶</button>
+  <a class="dl" href="audio/067-tournesols.mp3" download aria-label="Télécharger la piste 67">⬇</a>
+</li>
+<li class="pista" id="t68" data-n="68" data-src="audio/068-terrasse-cafe.mp3" data-titre="Terrasse du café le soir">
+  <span class="num">68</span><img src="img/068.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Terrasse du café le soir</b><small>Vincent van Gogh</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 68">▶</button>
+  <a class="dl" href="audio/068-terrasse-cafe.mp3" download aria-label="Télécharger la piste 68">⬇</a>
+</li>
+<li class="pista" id="t69" data-n="69" data-src="audio/069-chambre-arles.mp3" data-titre="La Chambre à Arles">
+  <span class="num">69</span><img src="img/069.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Chambre à Arles</b><small>Vincent van Gogh</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 69">▶</button>
+  <a class="dl" href="audio/069-chambre-arles.mp3" download aria-label="Télécharger la piste 69">⬇</a>
+</li>
+<li class="pista" id="t70" data-n="70" data-src="audio/070-iris.mp3" data-titre="Les Iris">
+  <span class="num">70</span><img src="img/070.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Iris</b><small>Vincent van Gogh</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 70">▶</button>
+  <a class="dl" href="audio/070-iris.mp3" download aria-label="Télécharger la piste 70">⬇</a>
+</li>
+<li class="pista" id="t71" data-n="71" data-src="audio/071-champ-ble-cypres.mp3" data-titre="Champ de blé avec cyprès">
+  <span class="num">71</span><img src="img/071.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Champ de blé avec cyprès</b><small>Vincent van Gogh</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 71">▶</button>
+  <a class="dl" href="audio/071-champ-ble-cypres.mp3" download aria-label="Télécharger la piste 71">⬇</a>
+</li>
+<li class="pista" id="t72" data-n="72" data-src="audio/072-nuit-etoilee.mp3" data-titre="La Nuit étoilée">
+  <span class="num">72</span><img src="img/072.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Nuit étoilée</b><small>Vincent van Gogh</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 72">▶</button>
+  <a class="dl" href="audio/072-nuit-etoilee.mp3" download aria-label="Télécharger la piste 72">⬇</a>
+</li>
+<li class="pista" id="t73" data-n="73" data-src="audio/073-amandier.mp3" data-titre="Amandier en fleurs">
+  <span class="num">73</span><img src="img/073.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Amandier en fleurs</b><small>Vincent van Gogh</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 73">▶</button>
+  <a class="dl" href="audio/073-amandier.mp3" download aria-label="Télécharger la piste 73">⬇</a>
+</li>
+<li class="pista" id="t74" data-n="74" data-src="audio/074-meules.mp3" data-titre="Les Meules">
+  <span class="num">74</span><img src="img/074.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Meules</b><small>Claude Monet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 74">▶</button>
+  <a class="dl" href="audio/074-meules.mp3" download aria-label="Télécharger la piste 74">⬇</a>
+</li>
+<li class="pista" id="t75" data-n="75" data-src="audio/075-surpris-tigre.mp3" data-titre="Surpris !">
+  <span class="num">75</span><img src="img/075.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Surpris !</b><small>Henri Rousseau</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 75">▶</button>
+  <a class="dl" href="audio/075-surpris-tigre.mp3" download aria-label="Télécharger la piste 75">⬇</a>
+</li>
+<li class="pista" id="t76" data-n="76" data-src="audio/076-le-cirque.mp3" data-titre="Le Cirque">
+  <span class="num">76</span><img src="img/076.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Cirque</b><small>Georges Seurat</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 76">▶</button>
+  <a class="dl" href="audio/076-le-cirque.mp3" download aria-label="Télécharger la piste 76">⬇</a>
+</li>
+<li class="pista" id="t77" data-n="77" data-src="audio/077-le-cri.mp3" data-titre="Le Cri">
+  <span class="num">77</span><img src="img/077.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Cri</b><small>Edvard Munch</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 77">▶</button>
+  <a class="dl" href="audio/077-le-cri.mp3" download aria-label="Télécharger la piste 77">⬇</a>
+</li>
+<li class="pista" id="t78" data-n="78" data-src="audio/078-bain-enfant.mp3" data-titre="Le Bain de l&#x27;enfant">
+  <span class="num">78</span><img src="img/078.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Bain de l&#x27;enfant</b><small>Mary Cassatt</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 78">▶</button>
+  <a class="dl" href="audio/078-bain-enfant.mp3" download aria-label="Télécharger la piste 78">⬇</a>
+</li>
+<li class="pista" id="t79" data-n="79" data-src="audio/079-petit-dejeuner-bouleau.mp3" data-titre="Petit-déjeuner sous le grand bouleau">
+  <span class="num">79</span><img src="img/079.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Petit-déjeuner sous le grand bouleau</b><small>Carl Larsson</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 79">▶</button>
+  <a class="dl" href="audio/079-petit-dejeuner-bouleau.mp3" download aria-label="Télécharger la piste 79">⬇</a>
+</li>
+<li class="pista" id="t80" data-n="80" data-src="audio/080-boulevard-montmartre.mp3" data-titre="Le Boulevard Montmartre, la nuit">
+  <span class="num">80</span><img src="img/080.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Boulevard Montmartre, la nuit</b><small>Camille Pissarro</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 80">▶</button>
+  <a class="dl" href="audio/080-boulevard-montmartre.mp3" download aria-label="Télécharger la piste 80">⬇</a>
+</li>
+<li class="pista" id="t81" data-n="81" data-src="audio/081-pont-japonais.mp3" data-titre="Le Pont japonais">
+  <span class="num">81</span><img src="img/081.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Pont japonais</b><small>Claude Monet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 81">▶</button>
+  <a class="dl" href="audio/081-pont-japonais.mp3" download aria-label="Télécharger la piste 81">⬇</a>
+</li>
+<li class="pista" id="t82" data-n="82" data-src="audio/082-pommes-oranges.mp3" data-titre="Pommes et oranges">
+  <span class="num">82</span><img src="img/082.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Pommes et oranges</b><small>Paul Cézanne</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 82">▶</button>
+  <a class="dl" href="audio/082-pommes-oranges.mp3" download aria-label="Télécharger la piste 82">⬇</a>
+</li>
+<li class="pista" id="t83" data-n="83" data-src="audio/083-port-saint-tropez.mp3" data-titre="Le Port de Saint-Tropez">
+  <span class="num">83</span><img src="img/083.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Le Port de Saint-Tropez</b><small>Paul Signac</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 83">▶</button>
+  <a class="dl" href="audio/083-port-saint-tropez.mp3" download aria-label="Télécharger la piste 83">⬇</a>
+</li>
+<li class="pista" id="t84" data-n="84" data-src="audio/084-sainte-victoire.mp3" data-titre="La Montagne Sainte-Victoire">
+  <span class="num">84</span><img src="img/084.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Montagne Sainte-Victoire</b><small>Paul Cézanne</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 84">▶</button>
+  <a class="dl" href="audio/084-sainte-victoire.mp3" download aria-label="Télécharger la piste 84">⬇</a>
+</li>
+<li class="pista" id="t85" data-n="85" data-src="audio/085-nympheas.mp3" data-titre="Les Nymphéas">
+  <span class="num">85</span><img src="img/085.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Nymphéas</b><small>Claude Monet</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 85">▶</button>
+  <a class="dl" href="audio/085-nympheas.mp3" download aria-label="Télécharger la piste 85">⬇</a>
+</li>
+<li class="pista" id="t86" data-n="86" data-src="audio/086-arbre-vie.mp3" data-titre="L&#x27;Arbre de vie">
+  <span class="num">86</span><img src="img/086.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>L&#x27;Arbre de vie</b><small>Gustav Klimt</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 86">▶</button>
+  <a class="dl" href="audio/086-arbre-vie.mp3" download aria-label="Télécharger la piste 86">⬇</a>
+</li>
+<li class="pista" id="t87" data-n="87" data-src="audio/087-promenade-mer.mp3" data-titre="Promenade au bord de la mer">
+  <span class="num">87</span><img src="img/087.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Promenade au bord de la mer</b><small>Joaquín Sorolla</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 87">▶</button>
+  <a class="dl" href="audio/087-promenade-mer.mp3" download aria-label="Télécharger la piste 87">⬇</a>
+</li>
+<li class="pista" id="t88" data-n="88" data-src="audio/088-grands-chevaux-bleus.mp3" data-titre="Les Grands Chevaux bleus">
+  <span class="num">88</span><img src="img/088.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Grands Chevaux bleus</b><small>Franz Marc</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 88">▶</button>
+  <a class="dl" href="audio/088-grands-chevaux-bleus.mp3" download aria-label="Télécharger la piste 88">⬇</a>
+</li>
+<li class="pista" id="t89" data-n="89" data-src="audio/089-vache-jaune.mp3" data-titre="La Vache jaune">
+  <span class="num">89</span><img src="img/089.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>La Vache jaune</b><small>Franz Marc</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 89">▶</button>
+  <a class="dl" href="audio/089-vache-jaune.mp3" download aria-label="Télécharger la piste 89">⬇</a>
+</li>
+<li class="pista" id="t90" data-n="90" data-src="audio/090-cheval-bleu.mp3" data-titre="Cheval bleu I">
+  <span class="num">90</span><img src="img/090.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Cheval bleu I</b><small>Franz Marc</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 90">▶</button>
+  <a class="dl" href="audio/090-cheval-bleu.mp3" download aria-label="Télécharger la piste 90">⬇</a>
+</li>
+<li class="pista" id="t91" data-n="91" data-src="audio/091-poissons-rouges.mp3" data-titre="Les Poissons rouges">
+  <span class="num">91</span><img src="img/091.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Les Poissons rouges</b><small>Henri Matisse</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 91">▶</button>
+  <a class="dl" href="audio/091-poissons-rouges.mp3" download aria-label="Télécharger la piste 91">⬇</a>
+</li>
+<li class="pista" id="t92" data-n="92" data-src="audio/092-deux-chats.mp3" data-titre="Deux Chats, bleu et jaune">
+  <span class="num">92</span><img src="img/092.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Deux Chats, bleu et jaune</b><small>Franz Marc</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 92">▶</button>
+  <a class="dl" href="audio/092-deux-chats.mp3" download aria-label="Télécharger la piste 92">⬇</a>
+</li>
+<li class="pista" id="t93" data-n="93" data-src="audio/093-senecio.mp3" data-titre="Senecio">
+  <span class="num">93</span><img src="img/093.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Senecio</b><small>Paul Klee</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 93">▶</button>
+  <a class="dl" href="audio/093-senecio.mp3" download aria-label="Télécharger la piste 93">⬇</a>
+</li>
+<li class="pista" id="t94" data-n="94" data-src="audio/094-composition-8.mp3" data-titre="Composition VIII">
+  <span class="num">94</span><img src="img/094.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Composition VIII</b><small>Wassily Kandinsky</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 94">▶</button>
+  <a class="dl" href="audio/094-composition-8.mp3" download aria-label="Télécharger la piste 94">⬇</a>
+</li>
+<li class="pista" id="t95" data-n="95" data-src="audio/095-jaune-rouge-bleu.mp3" data-titre="Jaune-Rouge-Bleu">
+  <span class="num">95</span><img src="img/095.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Jaune-Rouge-Bleu</b><small>Wassily Kandinsky</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 95">▶</button>
+  <a class="dl" href="audio/095-jaune-rouge-bleu.mp3" download aria-label="Télécharger la piste 95">⬇</a>
+</li>
+<li class="pista" id="t96" data-n="96" data-src="audio/096-chateau-soleil.mp3" data-titre="Château et soleil">
+  <span class="num">96</span><img src="img/096.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Château et soleil</b><small>Paul Klee</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 96">▶</button>
+  <a class="dl" href="audio/096-chateau-soleil.mp3" download aria-label="Télécharger la piste 96">⬇</a>
+</li>
+<li class="pista" id="t97" data-n="97" data-src="audio/097-chat-oiseau.mp3" data-titre="Chat et oiseau">
+  <span class="num">97</span><img src="img/097.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Chat et oiseau</b><small>Paul Klee</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 97">▶</button>
+  <a class="dl" href="audio/097-chat-oiseau.mp3" download aria-label="Télécharger la piste 97">⬇</a>
+</li>
+<li class="pista" id="t98" data-n="98" data-src="audio/098-composition-rjb.mp3" data-titre="Composition en rouge, jaune et bleu">
+  <span class="num">98</span><img src="img/098.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Composition en rouge, jaune et bleu</b><small>Piet Mondrian</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 98">▶</button>
+  <a class="dl" href="audio/098-composition-rjb.mp3" download aria-label="Télécharger la piste 98">⬇</a>
+</li>
+<li class="pista" id="t99" data-n="99" data-src="audio/099-broadway-boogie.mp3" data-titre="Broadway Boogie-Woogie">
+  <span class="num">99</span><img src="img/099.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>Broadway Boogie-Woogie</b><small>Piet Mondrian</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 99">▶</button>
+  <a class="dl" href="audio/099-broadway-boogie.mp3" download aria-label="Télécharger la piste 99">⬇</a>
+</li>
+<li class="pista" id="t100" data-n="100" data-src="audio/100-escargot.mp3" data-titre="L&#x27;Escargot">
+  <span class="num">100</span><img src="img/100.webp" alt="" loading="lazy" width="56" height="56">
+  <span class="info"><b>L&#x27;Escargot</b><small>Henri Matisse</small></span>
+  <button class="play" type="button" aria-label="Écouter le tableau 100">▶</button>
+  <a class="dl" href="audio/100-escargot.mp3" download aria-label="Télécharger la piste 100">⬇</a>
+</li>
+  </ol>
+  <section class="prochaine">
+    <h2>Prochaine étape</h2>
+    <p>Choisis un premier tableau facile, imprime sa page et lance sa piste. Quand le dessin est fini, accroche-le au mur à côté du vrai tableau.</p>
+  </section>
+  <p class="foot">Pour un usage personnel, en famille ou en classe. La revente et la redistribution sont interdites.</p>
+</main>
+<div class="lecteur" id="lecteur"><div class="fila">
+  <button type="button" id="pp" aria-label="Lecture ou pause">⏸</button>
+  <button type="button" id="rw" aria-label="Revenir au début">↺</button>
+  <div class="t"><b id="tt"></b><input type="range" id="pr" min="0" max="100" value="0" aria-label="Progression"></div>
+</div></div>
+<audio id="a" preload="none"></audio>
+<script>
+(function(){
+  var a=document.getElementById('a'),lec=document.getElementById('lecteur'),pp=document.getElementById('pp'),
+      tt=document.getElementById('tt'),pr=document.getElementById('pr'),actual=null;
+  function resaltar(li){document.querySelectorAll('.pista.activa').forEach(function(x){x.classList.remove('activa');});if(li)li.classList.add('activa');}
+  document.getElementById('lista').addEventListener('click',function(e){
+    var b=e.target.closest('.play');if(!b)return;var li=b.closest('.pista');
+    if(actual===li&&!a.paused){a.pause();return;}
+    if(actual!==li){if(actual)actual.querySelector('.play').textContent='▶';actual=li;a.src=li.dataset.src;tt.textContent=li.dataset.n+'. '+li.dataset.titre;}
+    resaltar(li);
+    lec.classList.add('on');a.play();
+  });
+  a.addEventListener('play',function(){pp.textContent='⏸';if(actual)actual.querySelector('.play').textContent='⏸';});
+  a.addEventListener('pause',function(){pp.textContent='▶';if(actual)actual.querySelector('.play').textContent='▶';});
+  a.addEventListener('ended',function(){pp.textContent='▶';if(actual)actual.querySelector('.play').textContent='▶';});
+  a.addEventListener('timeupdate',function(){if(a.duration)pr.value=a.currentTime/a.duration*100;});
+  pr.addEventListener('input',function(){if(a.duration)a.currentTime=pr.value/100*a.duration;});
+  pp.addEventListener('click',function(){a.paused?a.play():a.pause();});
+  document.getElementById('rw').addEventListener('click',function(){a.currentTime=0;a.play();});
+  document.getElementById('q').addEventListener('input',function(){
+    var li=document.getElementById('t'+parseInt(this.value,10));
+    if(li){li.scrollIntoView({behavior:'smooth',block:'center'});resaltar(li);}
+  });
+})();
+</script>
+</body>
+</html>
