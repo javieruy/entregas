@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Nekonečný sešit · Bystrá mysl</title>
+<!-- OTO 2 «Nekonečný sešit» (2026-10-27). Cuatro juegos generados en el navegador:
+     sudoku (port de generator/sudoku.py), osmisměrky con el banco checo del pack (generator/palabras.py
+     y sopa_letras.py: CH ocupa una casilla, relleno con la frecuencia del checo), číselné osmisměrky
+     (sopa_numeros.py) y bludiště (laberinto perfecto: una sola ruta). Sin servidor, sin claves, sin contactos. -->
+<style>
+  :root { --bg:#132a44; --ink:#f4f7fb; --acc:#e8743b; --card:rgba(255,255,255,.06); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+  .wrap { max-width:760px; margin:0 auto; padding:20px 16px 40px; }
+  h1 { font-size:28px; margin:0 0 4px; }
+  .sub { font-size:17px; opacity:.85; margin:0 0 22px; line-height:1.45; }
+  .panel { background:var(--card); border-radius:14px; padding:18px; margin:0 0 18px; }
+  .lbl { font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--acc); margin:0 0 10px; }
+  .opts { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 18px; }
+  .opts button { flex:1 1 140px; padding:14px 10px; font-size:17px; font-weight:700; border-radius:10px; border:2px solid rgba(255,255,255,.25);
+    background:transparent; color:var(--ink); cursor:pointer; line-height:1.25; }
+  .opts button small { display:block; font-weight:400; font-size:13px; opacity:.8; margin-top:3px; }
+  .opts button[aria-pressed="true"] { border-color:var(--acc); background:rgba(232,116,59,.18); }
+  .main { display:flex; flex-wrap:wrap; gap:10px; }
+  .main button { flex:1 1 220px; padding:18px; font-size:19px; font-weight:800; border:0; border-radius:12px; cursor:pointer; }
+  .go { background:linear-gradient(#22c55e,#15803d); color:#fff; }
+  .new { background:transparent; color:var(--ink); border:2px solid rgba(255,255,255,.35) !important; }
+  .name { width:100%; padding:14px; font-size:18px; border-radius:10px; border:2px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:var(--ink); margin:0 0 18px; }
+  .name::placeholder { color:rgba(244,247,251,.5); }
+  .cover { text-align:center; padding:20mm 0 0; }
+  .cover .brand { font-size:16px; letter-spacing:2px; text-transform:uppercase; }
+  .cover h2 { font-size:44px; margin:18px 0 6px; }
+  .cover .who { font-size:34px; font-weight:700; margin:0 0 6px; }
+  .cover .when { font-size:18px; margin:0 0 30px; }
+  .cover table { margin:0 auto; border-collapse:collapse; font-size:19px; text-align:left; }
+  .cover td { padding:9px 14px; border-bottom:1px solid #999; }
+  .cover td.box { width:34px; font-size:24px; }
+  .preview { background:#fff; color:#000; border-radius:12px; padding:18px; overflow:hidden; }
+  .note { font-size:14px; opacity:.8; margin:14px 0 0; line-height:1.5; }
+  /* --- hojas --- */
+  .sheet { background:#fff; color:#000; --W:min(84vw,620px); }
+  .sheet-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px; border-bottom:2px solid #000; padding-bottom:6px; margin-bottom:12px; }
+  .sheet-head b { font-size:22px; }
+  .sheet-head span { font-size:14px; white-space:nowrap; }
+  .rule { font-size:16px; line-height:1.4; margin:0 0 14px; }
+  table.g { border-collapse:collapse; margin:0 auto; }
+  table.g td { width:calc(var(--W) / var(--n)); height:calc(var(--W) / var(--n)); font-size:calc(var(--W) / var(--n) * .55);
+    text-align:center; vertical-align:middle; font-weight:700; padding:0; }
+  table.letters td { border:1px solid #bbb; font-size:calc(var(--W) / var(--n) * .5); }
+  table.letters { border:2px solid #000; }
+  table.sd td { border:1px solid #888; }
+  table.sd tr:nth-child(3n+1) td { border-top:3px solid #000; }
+  table.sd tr:last-child td { border-bottom:3px solid #000; }
+  table.sd td:nth-child(3n+1) { border-left:3px solid #000; }
+  table.sd td:last-child { border-right:3px solid #000; }
+  td.hit { background:#cfcfcf; }
+  .words { display:grid; grid-template-columns:repeat(4,1fr); gap:6px 12px; margin:14px 0 0; font-size:16px; font-weight:700; }
+  .words span::before { content:"☐ "; font-weight:400; }
+  .maze { display:block; margin:0 auto; width:var(--W); height:auto; }
+  .foot { font-size:13px; text-align:center; margin-top:12px; color:#444; }
+  .sols { display:grid; grid-template-columns:1fr 1fr; gap:16px 24px; }
+  .sols > div { --W:74mm; }
+  .sols h3 { font-size:13px; margin:0 0 6px; text-align:center; }
+  .sols table.g td { font-weight:400; }
+  #print { display:none; }
+  @media (max-width:520px) {
+    .words { grid-template-columns:repeat(2,1fr); }
+    .sheet-head { flex-direction:column; gap:2px; }
+    .sheet-head span { white-space:normal; font-size:12px; }
+  }
+  @media print {
+    @page { size:A4; margin:13mm; }
+    body { background:#fff; }
+    .wrap { display:none; }
+    #print { display:block; }
+    .sheet { --W:168mm; page-break-after:always; break-after:page; }
+    .sheet.ws { --W:160mm; }
+    .sheet:last-child { page-break-after:auto; break-after:auto; }
+    .sheet-head b { font-size:24px; }
+    .rule { font-size:16pt; }
+    .words { font-size:14pt; }
+    .sols > div { --W:80mm; }
+    .sols.sd > div { --W:62mm; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Nekonečný sešit</h1>
+  <p class="sub">Nová sudoku, osmisměrky a bludiště velkým písmem, kdykoli je potřebujete. Každá stránka je jiná a řešení najdete na konci.</p>
+
+  <div class="panel">
+    <p class="lbl">Jméno (vytiskne se na každou stránku)</p>
+    <input class="name" id="who" maxlength="30" placeholder="např. Maminka Jana" autocomplete="off">
+    <p class="lbl">1 · Druh</p>
+    <div class="opts" id="typ">
+      <button data-v="tyden" aria-pressed="false">📅 Týdenní sešit<small>7 dní, každý den jiná hra</small></button>
+      <button data-v="sudoku" aria-pressed="true">Sudoku</button>
+      <button data-v="slova" aria-pressed="false">Osmisměrka<small>slova podle témat</small></button>
+      <button data-v="cisla" aria-pressed="false">Číselná osmisměrka</button>
+      <button data-v="maze" aria-pressed="false">Bludiště</button>
+    </div>
+    <p class="lbl">2 · Obtížnost</p>
+    <div class="opts" id="lvl">
+      <button data-v="0" aria-pressed="true">Snadné<small></small></button>
+      <button data-v="1" aria-pressed="false">Střední<small></small></button>
+      <button data-v="2" aria-pressed="false">Těžké<small></small></button>
+      <button data-v="3" aria-pressed="false">Expert<small></small></button>
+    </div>
+    <p class="lbl" id="cntLbl">3 · Kolik stránek</p>
+    <div class="opts" id="cnt">
+      <button data-v="1" aria-pressed="false">1</button>
+      <button data-v="5" aria-pressed="true">5</button>
+      <button data-v="10" aria-pressed="false">10</button>
+      <button data-v="20" aria-pressed="false">20</button>
+    </div>
+    <div class="main">
+      <button class="go" id="btnPrint">🖨️ Vytisknout stránky</button>
+      <button class="new" id="btnNew">🔄 Jiná stránka</button>
+    </div>
+    <p class="note">Ukázka první stránky je níže. Každá úloha má jediné řešení. Tisk: A4, černobíle.</p>
+  </div>
+
+  <div class="preview" id="preview"></div>
+</div>
+<div id="print"></div>
+
+<script>
+(function () {
+  var TEMAS = {"Ovoce":["JABLKO","HRUŠKA","BANÁN","POMERANČ","CITRON","MELOUN","MERUŇKA","BROSKEV","ŠVESTKA","VIŠEŇ","JAHODA","MANDARINKA","MANGO","ANANAS","KDOULE","KOKOS","BORŮVKA","MALINA","OSTRUŽINA","RYBÍZ","ANGREŠT","BRUSINKA","DATLE","ROZINKA","HROZEN","ŠÍPEK","SLÍVA","JEŘABINA","AVOKÁDO","NEKTARINKA"],"Zelenina":["MRKEV","BRAMBORA","CIBULE","ČESNEK","RAJČE","OKURKA","SALÁT","ZELÍ","KAPUSTA","BROKOLICE","KVĚTÁK","ŘEDKVIČKA","ŘEPA","CELER","PÓREK","ŠPENÁT","LILEK","DÝNĚ","KUKUŘICE","HRÁŠEK","ČOČKA","CIZRNA","FAZOLE","PAPRIKA","PETRŽEL","BAZALKA","TUŘÍN","CHŘEST","ARTYČOK","KEDLUBEN"],"Zvířata":["KOČKA","KRÁVA","OVCE","KOZA","PRASE","SLEPICE","KACHNA","HUSA","KRÁLÍK","MYŠKA","TYGR","SLON","ŽIRAFA","ZEBRA","OPICE","LIŠKA","JELEN","VELRYBA","DELFÍN","ŽRALOK","OREL","HOLUB","VRABEC","ŽELVA","VELBLOUD","KLOKAN","MEDVĚD","JEZEVEC","VEVERKA","DIVOČÁK"],"Květiny":["RŮŽE","KARAFIÁT","TULIPÁN","KOPRETINA","SLUNEČNICE","JASMÍN","ORCHIDEJ","LILIE","FIALKA","PIVOŇKA","PETÚNIE","MUŠKÁT","HORTENZIE","MAGNÓLIE","KAMÉLIE","JIŘINA","MEČÍK","NARCIS","FRÉZIE","LEVANDULE","MĚSÍČEK","BEGONIE","CHRPA","LEKNÍN","HYACINT","SASANKA","KONVALINKA","MACEŠKA","ZVONEK","KOSATEC","BRAMBOŘÍK"],"Řemesla":["UČITEL","LÉKAŘ","PEKAŘ","KOVÁŘ","MALÍŘ","KREJČÍ","ŠVEC","INSTALATÉR","MECHANIK","KUCHAŘ","ZAHRADNÍK","RYBÁŘ","NÁMOŘNÍK","PILOT","ŘIDIČ","POŠŤÁK","HASIČ","POLICISTA","ZDRAVOTNÍK","ZUBAŘ","PRÁVNÍK","ÚČETNÍ","KNIHKUPEC","HODINÁŘ","ZLATNÍK","HOLIČ","TRUHLÁŘ","LÉKÁRNÍK","ŘEZNÍK","SKLENÁŘ"],"Země":["MEXIKO","CHILE","PERU","BRAZÍLIE","KANADA","FRANCIE","ITÁLIE","ŘECKO","EGYPT","ČÍNA","JAPONSKO","INDIE","RUSKO","TURECKO","HOLANDSKO","BELGIE","ŠVÉDSKO","NORSKO","POLSKO","RAKOUSKO","IRSKO","SKOTSKO","MAROKO","KEŇA","KUBA","PANAMA","URUGUAY","BOLÍVIE","EKVÁDOR","KOLUMBIE","SLOVENSKO"],"Města":["PRAHA","BRNO","OSTRAVA","PLZEŇ","OLOMOUC","LIBEREC","HRADEC","PARDUBICE","ZLÍN","JIHLAVA","TÁBOR","KOLÍN","TŘEBOŇ","KROMĚŘÍŽ","ŠUMPERK","MADRID","PAŘÍŽ","LONDÝN","BERLÍN","LISABON","ATÉNY","VÍDEŇ","MOSKVA","TOKIO","KÁHIRA","BENÁTKY","MILÁN","NEAPOL","BARCELONA","VARŠAVA","BUDAPEŠŤ"],"Kuchyně":["HRNEC","PÁNEV","LŽÍCE","VIDLIČKA","TALÍŘ","SKLENICE","HRNEK","DŽBÁN","MÍSA","CEDNÍK","STRUHADLO","ŠLEHAČ","STĚRKA","KLEŠTĚ","PRKÉNKO","TROUBA","LEDNICE","MIXÉR","KASTROL","KONVICE","TERMOSKA","UBRUS","ZÁSTĚRA","PODNOS","TRYCHTÝŘ","HMOŽDÍŘ","KÁVOVAR","ČAJNÍK","NABĚRAČKA","OTVÍRÁK"],"Oblečení":["KOŠILE","KALHOTY","SUKNĚ","ŠATY","SAKO","BUNDA","KABÁT","ŠÁLA","ČEPICE","RUKAVICE","PONOŽKA","BOTA","HOLÍNKA","SANDÁL","OPASEK","KRAVATA","VESTA","SVETR","TRIČKO","BLŮZA","OBLEK","PYŽAMO","ŽUPAN","KLOBOUK","ŠÁTEK","KOŽICH","MIKINA","DŽÍNY","PLÁŠTĚNKA","PLAVKY"],"Dům":["KUCHYNĚ","LOŽNICE","KOUPELNA","OBÝVÁK","CHODBA","SKLEP","PŮDA","GARÁŽ","ZAHRADA","BALKON","TERASA","STŘECHA","OKNO","DVEŘE","SCHOD","KOMÍN","PLOT","BRÁNA","STĚNA","PODLAHA","STROP","NÁBYTEK","POSTEL","SKŘÍŇ","STŮL","ŽIDLE","POLICE","ZRCADLO","LAMPA","KOBEREC","ZÁCLONA"],"Nářadí":["KLADIVO","HŘEBÍK","ŠROUB","ŠROUBOVÁK","KLEŠTĚ","PILKA","SEKERA","LOPATA","HRÁBĚ","MOTYKA","VRTAČKA","BRUSKA","SVĚRÁK","MĚŘIDLO","METR","VODOVÁHA","DLÁTO","PILNÍK","NŮŽKY","KOŠTĚ","KYBLÍK","ŽEBŘÍK","ŠTĚTEC","PÁJKA","NÝTOVAČKA","KOLEČKO","PROVAZ","IZOLEPA","KOMBINAČKY","HOBLÍK"],"Nástroje":["KYTARA","HOUSLE","PIANO","KLAVÍR","FLÉTNA","TRUBKA","BUBEN","HARFA","VIOLA","CELLO","KLARINET","HOBOJ","FAGOT","SAXOFON","POZOUN","VARHANY","AKORDEON","HARMONIKA","TAMBURÍNA","ČINELY","ZVONKOHRA","LOUTNA","MANDOLÍNA","BANJO","UKULELE","TRIANGL","KONTRABAS","CEMBALO","DUDY","PÍŠŤALA","TROMBÓN"],"Lidské tělo":["HLAVA","VLASY","ČELO","OBOČÍ","ÚSTA","JAZYK","BRADA","RAMENO","PAŽE","LOKET","RUKA","PRST","DLAŇ","NEHET","HRUDNÍK","BŘICHO","ZÁDA","PÁTEŘ","KOLENO","NOHA","KOTNÍK","PATA","CHODIDLO","SRDCE","PLÍCE","JÁTRA","LEDVINA","ŽALUDEK","SVAL","KOST","KŮŽE","MOZEK"],"Doprava":["AUTO","VLAK","AUTOBUS","TRAMVAJ","METRO","LETADLO","TRAJEKT","KOLO","MOTORKA","KAMION","DODÁVKA","TAXÍK","TROLEJBUS","VRTULNÍK","BALON","SANITKA","TRAKTOR","BAGR","JEŘÁB","VOZÍK","KOČÁR","SÁNĚ","LYŽE","BRUSLE","KANOE","VESLICE","PONORKA","RAKETA","LANOVKA","PŘÍVĚS","SKÚTR"],"Příroda":["HORA","ŘEKA","POTOK","JEZERO","MOŘE","SKÁLA","ÚDOLÍ","LOUKA","POLE","STROM","TRÁVA","KVĚTINA","LIST","VĚTEV","KOŘEN","PÍSEK","KÁMEN","HLÍNA","BAŽINA","VODOPÁD","JESKYNĚ","OSTROV","PLÁŽ","POBŘEŽÍ","OBLOHA","SLUNCE","MĚSÍC","HVĚZDA","MRAK","DUHA","VÍTR","SNÍH"],"Sport":["FOTBAL","HOKEJ","TENIS","BASKETBAL","VOLEJBAL","HÁZENÁ","PLAVÁNÍ","ATLETIKA","CYKLISTIKA","LYŽOVÁNÍ","BRUSLENÍ","GOLF","RAGBY","ZÁPAS","JUDO","KARATE","ŠERM","STŘELBA","VESLOVÁNÍ","JACHTING","GYMNASTIKA","SKOK","OŠTĚP","DISKUS","MARATON","TRIATLON","BADMINTON","KUŽELKY","ŠACHY","JÓGA","TURISTIKA"],"Barvy":["ČERVENÁ","MODRÁ","ZELENÁ","ŽLUTÁ","BÍLÁ","ČERNÁ","ŠEDÁ","HNĚDÁ","RŮŽOVÁ","FIALOVÁ","ORANŽOVÁ","BÉŽOVÁ","ZLATÁ","STŘÍBRNÁ","TYRKYSOVÁ","PURPUROVÁ","VÍNOVÁ","OLIVOVÁ","SMETANOVÁ","TMAVÁ","SVĚTLÁ","BLEDÁ","PESTRÁ","DUHOVÁ","MĚDĚNÁ","KRÉMOVÁ","LILÁK","INDIGO","OKROVÁ","POPELAVÁ","BRONZOVÁ"],"Rodina":["MATKA","OTEC","DCERA","BRATR","SESTRA","BABIČKA","DĚDEČEK","VNUK","VNUČKA","TETA","STRÝC","BRATRANEC","SESTŘENICE","ŠVAGR","ŠVAGROVÁ","TCHÁN","TCHYNĚ","SNACHA","MANŽEL","MANŽELKA","RODIČE","PRARODIČ","SOUROZENEC","KMOTR","KMOTRA","PŘÍBUZNÝ","POTOMEK","PŘEDEK","RODINA","DVOJČE"],"Jídlo":["CHLÉB","POLÉVKA","GULÁŠ","KNEDLÍK","ŘÍZEK","BRAMBORY","RÝŽE","TĚSTOVINY","OMÁČKA","SALÁT","ŠUNKA","KLOBÁSA","PÁRKY","VAJÍČKO","MÁSLO","MLÉKO","JOGURT","TVAROH","SMETANA","MARMELÁDA","KOLÁČ","BUCHTA","DORT","PALAČINKA","PERNÍK","SUŠENKA","ZMRZLINA","KOMPOT","SVÍČKOVÁ","BRAMBORÁK","HOUSKA"],"Počasí":["SLUNCE","DÉŠŤ","SNÍH","MRÁZ","VÍTR","BOUŘKA","BLESK","HROM","MLHA","MRAK","OBLAKA","DUHA","KROUPY","NÁMRAZA","JINOVATKA","VEDRO","HORKO","CHLAD","ZIMA","TEPLO","VLHKO","SUCHO","POVODEŇ","VICHŘICE","POLOJASNO","ZATAŽENO","JASNO","TEPLOTA","PŘEHÁŇKA","ROSA","LEDOVKA","OTEPLENÍ"]};
+
+  // ---------- utilidades ----------
+  function rng() {
+    if (window.crypto && crypto.getRandomValues) { var a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] / 4294967296; }
+    return Math.random();
+  }
+  function rint(n) { return Math.floor(rng() * n); }
+  function choice(a) { return a[rint(a.length)]; }
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = rint(i + 1); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function code() { return 10000 + rint(90000); }
+
+  // ================= SUDOKU (port de generator/sudoku.py) =================
+  var RC = [];
+  for (var i = 0; i < 81; i++) RC.push([Math.floor(i / 9), i % 9, Math.floor(i / 27) * 3 + Math.floor((i % 9) / 3)]);
+  var ALL = 0x1FF, UNITS = [];
+  for (var r = 0; r < 9; r++) { var u = []; for (var c = 0; c < 9; c++) u.push(r * 9 + c); UNITS.push(u); }
+  for (c = 0; c < 9; c++) { u = []; for (r = 0; r < 9; r++) u.push(r * 9 + c); UNITS.push(u); }
+  for (var b = 0; b < 9; b++) { u = []; for (var k = 0; k < 9; k++) u.push(Math.floor(b / 3) * 27 + (b % 3) * 3 + Math.floor(k / 3) * 9 + k % 3); UNITS.push(u); }
+  function bits(m) { var n = 0; while (m) { m &= m - 1; n++; } return n; }
+  function lowDigit(m) { var d = 0; while (!(m & 1)) { m >>= 1; d++; } return d + 1; }
+
+  function countSolutions(grid, limit) {
+    var g = grid.slice(), rows = [0,0,0,0,0,0,0,0,0], cols = rows.slice(), boxes = rows.slice(), n = 0;
+    for (var i = 0; i < 81; i++) if (g[i]) { var m = 1 << (g[i] - 1); rows[RC[i][0]] |= m; cols[RC[i][1]] |= m; boxes[RC[i][2]] |= m; }
+    function rec() {
+      var best = -1, bestFree = 0, bestN = 10;
+      for (var i = 0; i < 81; i++) {
+        if (g[i]) continue;
+        var f = ~(rows[RC[i][0]] | cols[RC[i][1]] | boxes[RC[i][2]]) & ALL, c = bits(f);
+        if (c === 0) return;
+        if (c < bestN) { bestN = c; best = i; bestFree = f; if (c === 1) break; }
+      }
+      if (best < 0) { n++; return; }
+      var R = RC[best];
+      while (bestFree) {
+        var m = bestFree & -bestFree; bestFree &= bestFree - 1;
+        g[best] = lowDigit(m); rows[R[0]] |= m; cols[R[1]] |= m; boxes[R[2]] |= m;
+        rec();
+        g[best] = 0; rows[R[0]] &= ~m; cols[R[1]] &= ~m; boxes[R[2]] &= ~m;
+        if (n >= limit) return;
+      }
+    }
+    rec();
+    return n;
+  }
+  function fullBoard() {
+    var g = new Array(81).fill(0);
+    function ok(i, v) {
+      for (var j = 0; j < 81; j++) if (g[j] === v && (RC[j][0] === RC[i][0] || RC[j][1] === RC[i][1] || RC[j][2] === RC[i][2])) return false;
+      return true;
+    }
+    function rec(i) {
+      if (i === 81) return true;
+      var ds = shuffle([1,2,3,4,5,6,7,8,9]);
+      for (var k = 0; k < 9; k++) if (ok(i, ds[k])) { g[i] = ds[k]; if (rec(i + 1)) return true; g[i] = 0; }
+      return false;
+    }
+    rec(0);
+    return g;
+  }
+  function sudokuGenerate(clues) {
+    var sol = fullBoard(), g = sol.slice(), pairs = [];
+    for (var i = 0; i < 41; i++) { var j = 80 - i; pairs.push(i === j ? [i] : [i, j]); }
+    shuffle(pairs);
+    var left = 81;
+    pairs.forEach(function (p) {
+      if (left - p.length < clues) return;
+      var saved = p.map(function (k) { return g[k]; });
+      p.forEach(function (k) { g[k] = 0; });
+      if (countSolutions(g, 2) === 1) left -= p.length;
+      else p.forEach(function (k, x) { g[k] = saved[x]; });
+    });
+    return { puzzle: g, solution: sol, clues: left };
+  }
+  function singlesRounds(grid) {
+    var g = grid.slice(), rounds = 0;
+    while (true) {
+      var cand = {}, any = false;
+      for (var i = 0; i < 81; i++) {
+        if (g[i]) continue;
+        var used = 0, us = UNITS[RC[i][0]].concat(UNITS[9 + RC[i][1]], UNITS[18 + RC[i][2]]);
+        for (var k = 0; k < us.length; k++) if (g[us[k]]) used |= 1 << (g[us[k]] - 1);
+        var free = ~used & ALL;
+        if (!free) return -1;
+        cand[i] = free; any = true;
+      }
+      if (!any) return rounds;
+      var placed = false;
+      for (var key in cand) { var f = cand[key]; if (!(f & (f - 1))) { g[+key] = lowDigit(f); placed = true; } }
+      if (!placed) {
+        outer: for (var x = 0; x < 27; x++) for (var d = 0; d < 9; d++) {
+          var bit = 1 << d, holes = UNITS[x].filter(function (c) { return cand[c] !== undefined && (cand[c] & bit); });
+          if (holes.length === 1) { g[holes[0]] = d + 1; placed = true; break outer; }
+        }
+      }
+      if (!placed) return -1;
+      rounds++;
+    }
+  }
+  // Como el pack: manda la técnica que pide, no solo cuántas pistas trae.
+  var SUDOKU = [
+    { clues: 40, ok: function (r) { return r >= 0 && r <= 6; } },
+    { clues: 34, ok: function (r) { return r >= 7; } },
+    { clues: 30, ok: function (r) { return r >= 0; } },
+    { clues: 26, ok: function (r) { return r < 0; } }
+  ];
+  function makeSudoku(level) {
+    var L = SUDOKU[level], best = null;
+    for (var t = 0; t < 12; t++) { best = sudokuGenerate(L.clues); if (L.ok(singlesRounds(best.puzzle))) break; }
+    best.kind = 'sudoku';
+    return best;
+  }
+
+  // ================= OSMISMĚRKY (port de sopa_letras.py y sopa_numeros.py) =================
+  var E = [1,0], S = [0,1], SE = [1,1], NE = [1,-1], W = [-1,0], N = [0,-1], SO = [-1,1], NO = [-1,-1];
+  var WS_LEVELS = [
+    { n: 10, dirs: [E, S], count: 10, words: [4, 7], nums: [4, 4] },
+    { n: 12, dirs: [E, S, SE, NE], count: 12, words: [4, 8], nums: [4, 5] },
+    { n: 14, dirs: [E, S, SE, NE, W, N], count: 14, words: [4, 9], nums: [4, 6] },
+    { n: 16, dirs: [E, S, SE, NE, W, N, SO, NO], count: 16, words: [4, 10], nums: [4, 6] }
+  ];
+  var DIR_TEXT = ['doprava a dolů', 'doprava, dolů a šikmo', 'doprava, dolů, šikmo, ale také pozpátku a nahoru', 'všemi osmi směry, i pozpátku'];
+  // Frecuencia del checo escrito (por mil), igual que el pack: CH tiene que estar en el relleno.
+  var FREQ = { O:87, E:78, N:65, A:62, T:57, S:52, I:51, V:45, L:38, R:36, K:35, D:34, P:32, M:32, U:30, 'Í':28,
+    Z:22, Y:20, 'Á':20, J:19, C:16, B:15, 'Ě':14, H:13, 'É':12, 'Ř':12, CH:11, 'Č':9, 'Ý':9, 'Ž':9, 'Š':8, 'Ů':5,
+    'Ú':4, F:2, G:2, 'Ň':2, 'Ť':1, 'Ď':1, 'Ó':1 };
+  var FILL_LETTERS = [];
+  Object.keys(FREQ).forEach(function (l) { for (var i = 0; i < FREQ[l]; i++) FILL_LETTERS.push(l); });
+
+  function cells(word) { // CH es UNA casilla
+    var out = [];
+    for (var i = 0; i < word.length; i++) { if (word.substr(i, 2) === 'CH') { out.push('CH'); i++; } else out.push(word[i]); }
+    return out;
+  }
+  function fits(grid, n, cs, x, y, d) {
+    var out = [];
+    for (var k = 0; k < cs.length; k++) {
+      var cx = x + d[0] * k, cy = y + d[1] * k;
+      if (cx < 0 || cy < 0 || cx >= n || cy >= n) return null;
+      var i = cy * n + cx;
+      if (grid[i] !== null && grid[i] !== cs[k]) return null;
+      out.push(i);
+    }
+    return out;
+  }
+  function occurrences(grid, n, cs, dirs) { // celda a celda: una C y una H juntas no son un CH
+    var out = [], L = cs.length;
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) dirs.forEach(function (d) {
+      var ex = x + d[0] * (L - 1), ey = y + d[1] * (L - 1);
+      if (ex < 0 || ey < 0 || ex >= n || ey >= n) return;
+      var idx = [], ok = true;
+      for (var k = 0; k < L; k++) { var i = (y + d[1] * k) * n + x + d[0] * k; if (grid[i] !== cs[k]) { ok = false; break; } idx.push(i); }
+      if (ok) out.push(idx);
+    });
+    return out;
+  }
+  function inside(small, big) {
+    if (small.length > big.length) return false;
+    for (var i = 0; i + small.length <= big.length; i++) {
+      var ok = true;
+      for (var k = 0; k < small.length; k++) if (big[i + k] !== small[k]) { ok = false; break; }
+      if (ok) return true;
+    }
+    return false;
+  }
+  function compatible(cs, chosen) {
+    var rev = cs.slice().reverse();
+    if (cs.join('|') === rev.join('|')) return false;
+    return chosen.every(function (o) {
+      var orev = o.slice().reverse();
+      return !(inside(cs, o) || inside(o, cs) || inside(rev, o) || inside(orev, cs));
+    });
+  }
+  // Coloca las piezas, rellena y quita lecturas dobles. pieces = lista de arrays de celdas.
+  function buildSearch(L, candidates, fillFn, changeFn) {
+    var n = L.n, grid = new Array(n * n).fill(null), placed = [], pos = [];
+    for (var c = 0; c < candidates.length && placed.length < L.count; c++) {
+      var cs = candidates[c];
+      if (!compatible(cs, placed)) continue;
+      var at = null;
+      for (var t = 0; t < 200 && !at; t++) at = fits(grid, n, cs, rint(n), rint(n), choice(L.dirs));
+      if (!at) continue;
+      at.forEach(function (i, k) { grid[i] = cs[k]; });
+      placed.push(cs); pos.push(at);
+    }
+    if (placed.length < L.count) return null;
+    var used = {};
+    pos.forEach(function (p) { p.forEach(function (i) { used[i] = 1; }); });
+    for (var i = 0; i < n * n; i++) if (grid[i] === null) grid[i] = fillFn();
+    for (var round = 0; round < 40; round++) {
+      var touched = 0, dirty = false;
+      placed.forEach(function (cs, w) {
+        occurrences(grid, n, cs, L.dirs).forEach(function (idx) {
+          if (idx.join() === pos[w].join()) return;
+          dirty = true;
+          var free = idx.filter(function (i) { return !used[i]; });
+          if (free.length) { var i = choice(free); grid[i] = changeFn(grid[i]); touched++; }
+        });
+      });
+      if (!dirty) return { n: n, grid: grid, pieces: placed, pos: pos };
+      if (!touched) return null;
+    }
+    return null;
+  }
+  var lastTheme = null;
+  function makeWords(level) {
+    var L = WS_LEVELS[level], themes = Object.keys(TEMAS);
+    for (var t = 0; t < 60; t++) {
+      var theme;
+      do { theme = choice(themes); } while (theme === lastTheme && themes.length > 1);
+      var cand = shuffle(TEMAS[theme].map(cells).filter(function (cs) { return cs.length >= L.words[0] && cs.length <= L.words[1]; }));
+      var res = buildSearch({ n: L.n, dirs: L.dirs, count: L.count }, cand,
+        function () { return choice(FILL_LETTERS); },
+        function (old) { var nw = old; while (nw === old) nw = choice(FILL_LETTERS); return nw; });
+      if (res) {
+        lastTheme = theme;
+        res.kind = 'slova'; res.theme = theme; res.level = level;
+        res.list = res.pieces.map(function (cs) { return cs.join(''); }).sort(function (a, b) { return a.localeCompare(b, 'cs'); });
+        return res;
+      }
+    }
+    throw new Error('osmismerka');
+  }
+  function makeNumbers(level) {
+    var L = WS_LEVELS[level];
+    for (var t = 0; t < 60; t++) {
+      var cand = [], seen = {};
+      while (cand.length < L.count * 3) {
+        var len = L.nums[0] + rint(L.nums[1] - L.nums[0] + 1);
+        var s = String(Math.pow(10, len - 1) + rint(9 * Math.pow(10, len - 1)));
+        if (seen[s] || s === s.split('').reverse().join('')) continue;
+        seen[s] = 1; cand.push(s.split(''));
+      }
+      var res = buildSearch({ n: L.n, dirs: L.dirs, count: L.count }, cand,
+        function () { return String(rint(10)); },
+        function (old) { return String((+old + 1 + rint(9)) % 10); });
+      if (res) {
+        res.kind = 'cisla'; res.level = level;
+        res.list = res.pieces.map(function (cs) { return cs.join(''); }).sort(function (a, b) { return a - b; });
+        return res;
+      }
+    }
+    throw new Error('ciselna');
+  }
+
+  // ================= BLUDIŠTĚ (laberinto perfecto: una sola ruta entre dos casillas) =================
+  var MAZE = [8, 12, 16, 22];
+  function makeMaze(level) {
+    var n = MAZE[level], walls = [], seen = new Array(n * n).fill(false);
+    // walls[i] = [arriba, derecha, abajo, izquierda]
+    for (var i = 0; i < n * n; i++) walls.push([1, 1, 1, 1]);
+    var D = [[0, -1, 0, 2], [1, 0, 1, 3], [0, 1, 2, 0], [-1, 0, 3, 1]];
+    var stack = [0]; seen[0] = true;
+    while (stack.length) {
+      var cur = stack[stack.length - 1], x = cur % n, y = Math.floor(cur / n);
+      var opts = D.filter(function (d) { var nx = x + d[0], ny = y + d[1]; return nx >= 0 && ny >= 0 && nx < n && ny < n && !seen[ny * n + nx]; });
+      if (!opts.length) { stack.pop(); continue; }
+      var d = choice(opts), nxt = (y + d[1]) * n + x + d[0];
+      walls[cur][d[2]] = 0; walls[nxt][d[3]] = 0; seen[nxt] = true; stack.push(nxt);
+    }
+    walls[0][0] = 0; walls[n * n - 1][2] = 0; // entrada arriba a la izquierda, salida abajo a la derecha
+    // ruta (BFS)
+    var prev = new Array(n * n).fill(-1), q = [0]; prev[0] = 0;
+    while (q.length) {
+      var c0 = q.shift(), cx = c0 % n, cy = Math.floor(c0 / n);
+      D.forEach(function (d) {
+        if (walls[c0][d[2]]) return;
+        var nx = cx + d[0], ny = cy + d[1];
+        if (nx < 0 || ny < 0 || nx >= n || ny >= n) return;
+        var ni = ny * n + nx;
+        if (prev[ni] < 0) { prev[ni] = c0; q.push(ni); }
+      });
+    }
+    var path = [n * n - 1];
+    while (path[path.length - 1] !== 0) path.push(prev[path[path.length - 1]]);
+    return { kind: 'maze', n: n, walls: walls, path: path.reverse() };
+  }
+
+  // ---------- pintar ----------
+  function sudokuTable(grid) {
+    var h = '<table class="g sd" style="--n:9">';
+    for (var r = 0; r < 9; r++) { h += '<tr>'; for (var c = 0; c < 9; c++) h += '<td>' + (grid[r * 9 + c] || '') + '</td>'; h += '</tr>'; }
+    return h + '</table>';
+  }
+  function letterTable(p, withSolution) {
+    var hit = {};
+    if (withSolution) p.pos.forEach(function (idx) { idx.forEach(function (i) { hit[i] = 1; }); });
+    var h = '<table class="g letters" style="--n:' + p.n + '">';
+    for (var r = 0; r < p.n; r++) {
+      h += '<tr>';
+      for (var c = 0; c < p.n; c++) { var i = r * p.n + c; h += '<td' + (hit[i] ? ' class="hit"' : '') + '>' + p.grid[i] + '</td>'; }
+      h += '</tr>';
+    }
+    return h + '</table>';
+  }
+  function mazeSVG(p, withSolution) {
+    var n = p.n, s = 10, m = 14, size = n * s + 2 * m, h = '';
+    h += '<svg class="maze" viewBox="0 0 ' + size + ' ' + size + '" xmlns="http://www.w3.org/2000/svg">';
+    var sw = n > 16 ? 0.9 : 1.2, lines = '';
+    for (var i = 0; i < n * n; i++) {
+      var x = m + (i % n) * s, y = m + Math.floor(i / n) * s, w = p.walls[i];
+      if (w[0]) lines += 'M' + x + ' ' + y + 'h' + s;
+      if (w[3]) lines += 'M' + x + ' ' + y + 'v' + s;
+      if (i % n === n - 1 && w[1]) lines += 'M' + (x + s) + ' ' + y + 'v' + s;
+      if (Math.floor(i / n) === n - 1 && w[2]) lines += 'M' + x + ' ' + (y + s) + 'h' + s;
+    }
+    h += '<path d="' + lines + '" stroke="#000" stroke-width="' + sw + '" stroke-linecap="square" fill="none"/>';
+    if (withSolution) {
+      var pts = p.path.map(function (i) { return (m + (i % n) * s + s / 2) + ',' + (m + Math.floor(i / n) * s + s / 2); });
+      pts.unshift((m + s / 2) + ',' + (m - 4)); pts.push((m + (n - 1) * s + s / 2) + ',' + (m + n * s + 4));
+      h += '<polyline points="' + pts.join(' ') + '" stroke="#777" stroke-width="' + (s * 0.35) + '" fill="none" stroke-linejoin="round" stroke-linecap="round"/>';
+    }
+    h += '<text x="' + (m + s / 2) + '" y="' + (m - 4) + '" font-size="7" font-weight="700" text-anchor="middle" font-family="Arial">START ▼</text>';
+    h += '<text x="' + (m + (n - 1) * s + s / 2) + '" y="' + (m + n * s + 10) + '" font-size="7" font-weight="700" text-anchor="middle" font-family="Arial">▼ CÍL</text>';
+    return h + '</svg>';
+  }
+
+  var TITLE = { sudoku: 'Sudoku', slova: 'Osmisměrka', cisla: 'Číselná osmisměrka', maze: 'Bludiště' };
+  var LEVEL_NAMES = ['Snadné', 'Střední', 'Těžké', 'Expert'];
+  var HINTS = {
+    tyden: ['na rozehřátí', 'trochu přemýšlení', 'pořádný trénink', 'pro zkušené'],
+    sudoku: ['na rozehřátí', 'křížení řádků a sloupců', 'vyplatí se kandidáti', 'pro trpělivé'],
+    slova: ['10 × 10', '12 × 12', '14 × 14', '16 × 16'],
+    cisla: ['10 × 10', '12 × 12', '14 × 14', '16 × 16'],
+    maze: ['8 × 8', '12 × 12', '16 × 16', '22 × 22']
+  };
+  // Týdenní sešit: cada día un juego distinto
+  var DAYS = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
+  var WEEK_PLAN = ['sudoku', 'slova', 'maze', 'cisla', 'sudoku', 'slova', 'maze'];
+
+  function rule(p, level) {
+    if (p.kind === 'sudoku') return 'Doplňte čísla od 1 do 9. Žádné číslo se nesmí opakovat v řádku, ve sloupci ani ve&nbsp;čtverci 3&nbsp;×&nbsp;3.';
+    if (p.kind === 'slova') return 'Najděte v mřížce všechna slova ze seznamu. Vedou ' + DIR_TEXT[level] + '. CH je jedno políčko. Nalezené slovo zakroužkujte a&nbsp;v&nbsp;seznamu odškrtněte.';
+    if (p.kind === 'cisla') return 'Najděte v mřížce všechna čísla ze seznamu. Vedou ' + DIR_TEXT[level] + '. Nalezené číslo zakroužkujte a&nbsp;v&nbsp;seznamu odškrtněte.';
+    return 'Najděte cestu od šipky START až do cíle. Čáry se nesmí přecházet. Cesta je jen jedna.';
+  }
+  function body(p) {
+    if (p.kind === 'sudoku') return sudokuTable(p.puzzle);
+    if (p.kind === 'maze') return mazeSVG(p, false);
+    return letterTable(p, false) + '<div class="words">' + p.list.map(function (w) { return '<span>' + w + '</span>'; }).join('') + '</div>';
+  }
+  function solutionBody(p) {
+    if (p.kind === 'sudoku') return sudokuTable(p.solution);
+    if (p.kind === 'maze') return mazeSVG(p, true);
+    return letterTable(p, true);
+  }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function sheetHTML(p, n, total, level, day) {
+    var title = (day ? day + ' · ' : '') + TITLE[p.kind] + ' · ' + LEVEL_NAMES[level] + (p.theme ? ' · ' + p.theme : '');
+    var who = state.name ? esc(state.name) + ' · ' : '';
+    return '<div class="sheet' + (p.kind === 'slova' || p.kind === 'cisla' ? ' ws' : '') + '"><div class="sheet-head"><b>' + title + '</b><span>' + who + 'Stránka ' + n + ' z ' + total + ' · č. ' + p.code + '</span></div>' +
+      '<p class="rule">' + rule(p, level) + '</p>' + body(p) +
+      '<p class="foot">Bystrá mysl · Nekonečný sešit · Řešení najdete na konci (č. ' + p.code + ').</p></div>';
+  }
+  function solutionsHTML(list) {
+    var allSd = list.every(function (p) { return p.kind === 'sudoku'; }), per = allSd ? 6 : 4, h = '';
+    for (var i = 0; i < list.length; i += per) {
+      h += '<div class="sheet"><div class="sheet-head"><b>Řešení</b><span>Bystrá mysl · Nekonečný sešit</span></div><div class="sols' + (allSd ? ' sd' : '') + '">';
+      list.slice(i, i + per).forEach(function (p, k) { h += '<div><h3>Stránka ' + (i + k + 1) + ' · č. ' + p.code + '</h3>' + solutionBody(p) + '</div>'; });
+      h += '</div></div>';
+    }
+    return h;
+  }
+  function weekRange() {
+    var d = new Date(), monday = new Date(d); monday.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    var sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+    function f(x, y) { return x.getDate() + '. ' + (x.getMonth() + 1) + '.' + (y ? ' ' + x.getFullYear() : ''); }
+    return f(monday) + ' – ' + f(sunday, true);
+  }
+  function coverHTML(level) {
+    var rows = DAYS.map(function (d, i) { return '<tr><td class="box">☐</td><td><b>' + d + '</b></td><td>' + TITLE[WEEK_PLAN[i]] + '</td></tr>'; }).join('');
+    return '<div class="sheet"><div class="cover"><p class="brand">Bystrá mysl</p><h2>Týdenní sešit</h2>' +
+      (state.name ? '<p class="who">' + esc(state.name) + '</p>' : '') +
+      '<p class="when">Týden ' + weekRange() + ' · ' + LEVEL_NAMES[level] + '</p>' +
+      '<table>' + rows + '</table><p class="foot" style="margin-top:28px">Každý den jedna stránka. Hotový den si zaškrtněte. Řešení najdete na konci sešitu.</p></div></div>';
+  }
+
+  var MAKERS = { sudoku: makeSudoku, slova: makeWords, cisla: makeNumbers, maze: makeMaze };
+  function make(kind, level) { var p = MAKERS[kind](level); p.code = code(); return p; }
+
+  var state = { kind: 'sudoku', level: 0, count: 5, first: null, name: '' };
+  try { state.name = localStorage.getItem('nek-name') || ''; } catch (e) {}
+  function showPreview() {
+    document.getElementById('preview').innerHTML = state.kind === 'tyden' ? coverHTML(state.level) : sheetHTML(state.first, 1, state.count, state.level);
+  }
+  function refresh() { if (state.kind !== 'tyden') state.first = make(state.kind, state.level); showPreview(); }
+  function setHints() {
+    document.querySelectorAll('#lvl button small').forEach(function (s, i) { s.textContent = HINTS[state.kind][i]; });
+    var week = state.kind === 'tyden';
+    document.getElementById('cnt').style.display = week ? 'none' : '';
+    document.getElementById('cntLbl').style.display = week ? 'none' : '';
+    document.getElementById('btnPrint').textContent = week ? '🖨️ Vytisknout týdenní sešit' : '🖨️ Vytisknout stránky';
+  }
+  function pick(groupId, key) {
+    var g = document.getElementById(groupId);
+    g.addEventListener('click', function (e) {
+      var btn = e.target.closest('button'); if (!btn) return;
+      g.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === btn ? 'true' : 'false'); });
+      state[key] = key === 'kind' ? btn.dataset.v : +btn.dataset.v;
+      if (key === 'kind') setHints();
+      if (key === 'count') showPreview(); else refresh();
+    });
+  }
+  pick('typ', 'kind'); pick('lvl', 'level'); pick('cnt', 'count');
+  var who = document.getElementById('who');
+  who.value = state.name;
+  who.addEventListener('input', function () {
+    state.name = who.value.trim();
+    try { localStorage.setItem('nek-name', state.name); } catch (e) {}
+    showPreview();
+  });
+  document.getElementById('btnNew').onclick = refresh;
+  function buildPrint() {
+    var h = '', list = [];
+    if (state.kind === 'tyden') {
+      WEEK_PLAN.forEach(function (k) { list.push(make(k, state.level)); });
+      h = coverHTML(state.level);
+      list.forEach(function (p, i) { h += sheetHTML(p, i + 1, 7, state.level, DAYS[i]); });
+    } else {
+      list = [state.first];
+      for (var i = 1; i < state.count; i++) list.push(make(state.kind, state.level));
+      list.forEach(function (p, i) { h += sheetHTML(p, i + 1, state.count, state.level); });
+    }
+    document.getElementById('print').innerHTML = h + solutionsHTML(list);
+  }
+  document.getElementById('btnPrint').onclick = function () { buildPrint(); window.print(); };
+  window.__nek = { buildPrint: buildPrint, make: make, countSolutions: countSolutions, singlesRounds: singlesRounds, occurrences: occurrences, cells: cells, state: state };
+  setHints();
+  refresh();
+})();
+</script>
+</body>
+</html>
