@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Endless Art Studio · Little Artists</title>
+<!-- Versión en inglés de EE. UU. para Little Artists (en/traducir_app.py), 2026-10-28. App de Petits Artistes (2026-10-27), hermana de «Nekonečný sešit» de Bystrá mysl. Todo se genera en el navegador:
+     - coloriages par numéros «à la manière de» tres pintores del libro: Mondrian (rectángulos por cortes sucesivos),
+       Klee (mosaico con techos y sol) y Kandinsky (cuadrados con círculos concéntricos); zonas vecinas nunca comparten color;
+     - mandalas: anillos con borde de pétalos, cada anillo cortado en sectores en los valles de su borde (zonas sin huecos);
+     - simetría: figura espejo tipo identicon, el niño completa la mitad derecha;
+     - laberintos: port del de Bystrá mysl (laberinto perfecto, una sola ruta), en tamaños para niños;
+     - carnet de la semaine: portada con el nombre, 7 actividades, diploma y modelos/soluciones al final.
+     Sin servidor, sin claves, sin contactos. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#fffdf6; --paper:#fff; --ink:#1e2a4a; --mut:#55607a; --acc:#1e2a6e; --line:#e8d6a8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:Nunito,Arial,Helvetica,sans-serif; }
+  .wrap { max-width:760px; margin:0 auto; padding:20px 16px 40px; }
+  .brand { font-family:Fredoka,Arial,sans-serif; font-size:14px; letter-spacing:2px; text-transform:uppercase; color:var(--mut); margin:0 0 4px; }
+  h1 { font-family:Fredoka,Arial,sans-serif; font-weight:600; font-size:32px; margin:0 0 6px; color:var(--acc); }
+  .sub { font-size:17px; color:var(--mut); margin:0 0 22px; line-height:1.45; }
+  .panel { background:var(--paper); border:2px solid var(--line); border-radius:16px; padding:18px; margin:0 0 18px; }
+  .lbl { font-family:Fredoka,Arial,sans-serif; font-size:15px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:var(--acc); margin:0 0 10px; }
+  .opts { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 18px; }
+  .opts button { flex:1 1 140px; padding:14px 10px; font:700 17px Nunito,Arial,sans-serif; border-radius:12px; border:2px solid var(--line);
+    background:var(--bg); color:var(--ink); cursor:pointer; line-height:1.25; }
+  .opts button small { display:block; font-weight:400; font-size:13px; color:var(--mut); margin-top:3px; }
+  .opts button[aria-pressed="true"] { border-color:var(--acc); background:#e9ecfa; }
+  .opts button.big { flex-basis:100%; }
+  .off { opacity:.4; pointer-events:none; }
+  .main { display:flex; flex-wrap:wrap; gap:10px; }
+  .main button { flex:1 1 200px; padding:17px; font:800 18px Nunito,Arial,sans-serif; border:0; border-radius:12px; cursor:pointer; }
+  .go { background:var(--acc); color:#fff; box-shadow:0 4px 0 var(--ink); }
+  .alt { background:var(--bg); color:var(--ink); border:2px solid var(--line) !important; }
+  .name { width:100%; padding:14px; font:18px Nunito,Arial,sans-serif; border-radius:12px; border:2px solid var(--line); background:var(--bg); color:var(--ink); margin:0 0 18px; }
+  .preview { background:#fff; border:2px solid var(--line); border-radius:16px; padding:18px; overflow:hidden; }
+  .note { font-size:14px; color:var(--mut); margin:14px 0 0; line-height:1.5; }
+  /* --- hojas --- */
+  .sheet { background:#fff; color:#111; }
+  .sheet-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px; border-bottom:2px solid #111; padding-bottom:6px; margin-bottom:10px; }
+  .sheet-head b { font-family:Fredoka,Arial,sans-serif; font-weight:600; font-size:24px; }
+  .sheet-head span { font-size:14px; white-space:nowrap; }
+  .rule { font-size:17px; font-weight:700; margin:0 0 12px; line-height:1.35; }
+  svg.art { display:block; width:100%; max-width:600px; height:auto; margin:0 auto; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .legend { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 18px; margin:14px 0 0; font-size:17px; font-weight:700; }
+  .legend span { display:inline-flex; align-items:center; gap:7px; }
+  .legend i { display:inline-block; width:22px; height:22px; border:2px solid #111; border-radius:5px;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .legend .white { font-weight:400; font-size:15px; flex-basis:100%; justify-content:center; }
+  .foot { font-size:13px; text-align:center; margin:12px 0 0; color:#444; }
+  .models h2 { font-family:Fredoka,Arial,sans-serif; font-weight:600; font-size:22px; margin:0 0 12px; border-bottom:2px solid #111; padding-bottom:6px; }
+  .models .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 24px; }
+  .models h3 { font-size:13px; margin:0 0 6px; text-align:center; }
+  .cover, .diplome { text-align:center; }
+  .cover { padding:14mm 0 0; }
+  .cover .brand, .diplome .brand { color:#555; }
+  .cover h2 { font-family:Fredoka,Arial,sans-serif; font-weight:600; font-size:40px; margin:14px 0 6px; }
+  .cover .who { font-family:Fredoka,Arial,sans-serif; font-size:32px; margin:0 0 6px; }
+  .cover .when { font-size:18px; margin:0 0 26px; }
+  .cover table { margin:0 auto; border-collapse:collapse; font-size:19px; text-align:left; }
+  .cover td { padding:10px 14px; border-bottom:1px solid #999; }
+  .cover td.box { width:34px; font-size:24px; }
+  .diplome { border:6px double #1e2a6e; border-radius:18px; padding:16mm 10mm; margin:8mm 0 0; }
+  .diplome .stars { font-size:34px; letter-spacing:10px; color:#f0b400; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .diplome h2 { font-family:Fredoka,Arial,sans-serif; font-weight:600; font-size:40px; margin:10px 0 18px; color:#1e2a6e; }
+  .diplome p { font-size:20px; margin:0 0 10px; line-height:1.4; }
+  .diplome .who { font-family:Fredoka,Arial,sans-serif; font-size:40px; margin:6px 0 16px; }
+  .diplome .sign { margin-top:30px; font-size:17px; }
+  #print { display:none; }
+  @media (max-width:520px) {
+    .sheet-head { flex-direction:column; gap:2px; }
+    .sheet-head span { white-space:normal; font-size:12px; }
+    .legend { font-size:15px; }
+    .cover h2, .diplome h2 { font-size:30px; }
+    .cover .who, .diplome .who { font-size:26px; }
+  }
+  @media print {
+    @page { size:letter; margin:12mm; }
+    body { background:#fff; }
+    .wrap { display:none; }
+    #print { display:block; }
+    #print > div { page-break-after:always; break-after:page; }
+    #print > :last-child { page-break-after:auto; break-after:auto; }
+    .sheet svg.art { width:178mm; max-width:none; }
+    .models svg.art { width:80mm; max-width:none; }
+    .sheet-head b { font-size:22pt; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="brand">Little Artists</p>
+  <h1>Endless Art Studio</h1>
+  <p class="sub">Magic coloring pages in the style of great painters, plus mandalas, mirror drawings and mazes. Print them as many times as you like. Every page is different, and the answer key is at the end.</p>
+
+  <div class="panel">
+    <p class="lbl">Your child’s first name (printed on every page)</p>
+    <input class="name" id="who" maxlength="24" placeholder="e.g. Emma" autocomplete="off">
+    <p class="lbl">1 · Activity</p>
+    <div class="opts" id="typ">
+      <button class="big" data-v="carnet" aria-pressed="false">📅 My Art Week<small>7 days, a different activity every day and a certificate at the end</small></button>
+      <button data-v="mondrian" aria-pressed="true">🟥 Mondrian<small>black lines and bright colors</small></button>
+      <button data-v="klee" aria-pressed="false">🏰 Klee<small>castle and sun</small></button>
+      <button data-v="kandinsky" aria-pressed="false">🎯 Kandinsky<small>circles of color</small></button>
+      <button data-v="mandala" aria-pressed="false">🌸 Mandala<small>a flower of colors</small></button>
+      <button data-v="symetrie" aria-pressed="false">🦋 Magic Mirror<small>finish the drawing</small></button>
+      <button data-v="labyrinthe" aria-pressed="false">🌀 Maze<small>find the way</small></button>
+      <button data-v="surprise" aria-pressed="false">🎲 Surprise<small>a random activity</small></button>
+    </div>
+    <p class="lbl">2 · Age</p>
+    <div class="opts" id="lvl">
+      <button data-v="0" aria-pressed="true">Little ones<small>ages 4-5 · big shapes</small></button>
+      <button data-v="1" aria-pressed="false">Middle kids<small>ages 6-7</small></button>
+      <button data-v="2" aria-pressed="false">Big kids<small>ages 8-10 · small shapes</small></button>
+    </div>
+    <div id="cntBox">
+      <p class="lbl">3 · Number of pages</p>
+      <div class="opts" id="cnt">
+        <button data-v="1" aria-pressed="false">1</button>
+        <button data-v="5" aria-pressed="true">5</button>
+        <button data-v="10" aria-pressed="false">10</button>
+        <button data-v="20" aria-pressed="false">20</button>
+      </div>
+    </div>
+    <div class="main">
+      <button class="go" id="btnPrint">🖨️ Print the pages</button>
+      <button class="alt" id="btnNew">🔄 New drawing</button>
+      <button class="alt" id="btnModel">👁️ Show the answer</button>
+    </div>
+    <p class="note">Here’s a preview of the first page. US Letter size. The color key looks best printed in color, but each color’s name is written next to it.</p>
+  </div>
+
+  <div class="preview" id="preview"></div>
+</div>
+<div id="print"></div>
+
+<script>
+(function () {
+  // ---------- utilidades ----------
+  function rnd() { var a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] / 4294967296; }
+  function pick(a) { return a[Math.floor(rnd() * a.length)]; }
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function code() { return String(10000 + Math.floor(rnd() * 90000)); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  var COL = { rouge:'#d62828', jaune:'#f6c90e', bleu:'#1d4fa8', vert:'#2f9e44', orange:'#f08c00', violet:'#7b3fa0',
+              rose:'#f48fb1', ciel:'#74c0fc', marron:'#8d5a2b', noir:'#111111' };
+  var NOM = { rouge:'red', jaune:'yellow', bleu:'blue', vert:'green', orange:'orange', violet:'purple',
+              rose:'pink', ciel:'light blue', marron:'brown', noir:'black' };
+  var ORDEN = ['rouge','jaune','bleu','vert','orange','violet','rose','ciel','marron','noir'];
+
+  var ACT = {
+    mondrian:   { titre:'In the style of Piet Mondrian', corto:'Mondrian', jour:'Mondrian',
+                  dato:'Piet Mondrian (1872-1944) painted with black lines and just three colors: red, yellow and blue.' },
+    klee:       { titre:'In the style of Paul Klee', corto:'Klee', jour:'Klee',
+                  dato:'Paul Klee (1879-1940) built towns and castles out of colored squares.' },
+    kandinsky:  { titre:'In the style of Wassily Kandinsky', corto:'Kandinsky', jour:'Kandinsky',
+                  dato:'Wassily Kandinsky (1866-1944) said that every color has its own music.' },
+    mandala:    { titre:'Mandala', corto:'Mandala', jour:'Mandala',
+                  dato:'The word “mandala” means “circle” in Sanskrit.' },
+    symetrie:   { titre:'Magic Mirror', corto:'Magic Mirror', jour:'Magic Mirror',
+                  dato:'Tip: the red line is the mirror. Look closely at the square on the other side.' },
+    labyrinthe: { titre:'Maze', corto:'Maze', jour:'Maze',
+                  dato:'Tip: if you get stuck, try starting from the finish.' }
+  };
+  var ACTIVIDADES = ['mondrian', 'klee', 'kandinsky', 'mandala', 'symetrie', 'labyrinthe'];
+  var JOURS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var SEMANA = ['mondrian', 'labyrinthe', 'mandala', 'klee', 'symetrie', 'kandinsky', 'mandala'];
+
+  // Colorea las zonas sin repetir color entre vecinas (adj = lista de vecinos por índice).
+  function colorear(zonas, adj, paleta, orden) {
+    (orden || zonas.map(function (_, i) { return i; })).forEach(function (i) {
+      var usados = adj[i].map(function (j) { return zonas[j].c; });
+      var libres = paleta.filter(function (c) { return usados.indexOf(c) < 0; });
+      zonas[i].c = pick(libres.length ? libres : paleta);
+    });
+  }
+  function vecinosVacios(n) { var a = []; for (var i = 0; i < n; i++) a.push([]); return a; }
+  function unir(adj, i, j) { if (i !== j && adj[i].indexOf(j) < 0) { adj[i].push(j); adj[j].push(i); } }
+  function rectsTocan(a, b) {
+    var tv = Math.abs(a.x + a.w - b.x) < 1 || Math.abs(b.x + b.w - a.x) < 1;
+    var th = Math.abs(a.y + a.h - b.y) < 1 || Math.abs(b.y + b.h - a.y) < 1;
+    var oy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y) > 1;
+    var ox = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x) > 1;
+    return (tv && oy) || (th && ox);
+  }
+  function pesos(n, lo, hi, total) {
+    var w = []; for (var i = 0; i < n; i++) w.push(lo + rnd() * (hi - lo));
+    var s = w.reduce(function (a, b) { return a + b; }, 0), acc = 0, out = [];
+    for (i = 0; i < n; i++) { var v = i === n - 1 ? total - acc : Math.round(w[i] / s * total); out.push(v); acc += v; }
+    return out;
+  }
+
+  // ---------- Mondrian: cortes sucesivos de un cuadrado ----------
+  function genMondrian(lv) {
+    var cfg = [{ n:6, min:220 }, { n:10, min:140 }, { n:15, min:95 }][lv];
+    for (var intento = 0; intento < 40; intento++) {
+      var R = [{ x:0, y:0, w:1000, h:1000 }], vueltas = 0;
+      while (R.length < cfg.n && vueltas++ < 400) {
+        var tot = 0; R.forEach(function (r) { tot += r.w * r.h; });
+        var t = rnd() * tot, i = 0;
+        for (; i < R.length - 1; i++) { t -= R[i].w * R[i].h; if (t <= 0) break; }
+        var r = R[i], vert = r.w > r.h ? rnd() < .75 : rnd() < .25;
+        if ((vert ? r.w : r.h) < 2 * cfg.min) vert = !vert;
+        var len = vert ? r.w : r.h;
+        if (len < 2 * cfg.min) continue;
+        var cut = Math.round((cfg.min + rnd() * (len - 2 * cfg.min)) / 10) * 10;
+        var a, b;
+        if (vert) { a = { x:r.x, y:r.y, w:cut, h:r.h }; b = { x:r.x + cut, y:r.y, w:r.w - cut, h:r.h }; }
+        else { a = { x:r.x, y:r.y, w:r.w, h:cut }; b = { x:r.x, y:r.y + cut, w:r.w, h:r.h - cut }; }
+        R.splice(i, 1, a, b);
+      }
+      var adj = vecinosVacios(R.length);
+      for (var p = 0; p < R.length; p++) for (var q = p + 1; q < R.length; q++) if (rectsTocan(R[p], R[q])) unir(adj, p, q);
+      var zonas = R.map(function (r) {
+        return { t:'rect', x:r.x, y:r.y, w:r.w, h:r.h, c:null, lx:r.x + r.w / 2, ly:r.y + r.h / 2, fs:clamp(Math.min(r.w, r.h) * .32, 30, 80) };
+      });
+      // ~45 % con color; el resto queda blanco, como en los cuadros de Mondrian
+      var conColor = shuffle(zonas.map(function (_, k) { return k; })).slice(0, Math.max(3, Math.round(R.length * .45)));
+      var pal = ['rouge', 'jaune', 'bleu'];
+      conColor.forEach(function (k) {
+        var usados = adj[k].map(function (j) { return zonas[j].c; });
+        var libres = pal.filter(function (c) { return usados.indexOf(c) < 0; });
+        zonas[k].c = libres.length ? pick(libres) : null;
+      });
+      if (lv === 2) { // en el nivel alto, un rectángulo chico negro
+        var blancos = zonas.filter(function (z) { return !z.c; }).sort(function (a, b) { return a.w * a.h - b.w * b.h; });
+        if (blancos.length > 2) blancos[0].c = 'noir';
+      }
+      var usadas = zonas.map(function (z) { return z.c; });
+      if (pal.every(function (c) { return usadas.indexOf(c) >= 0; })) {
+        return { tipo:'color', vb:'-12 -12 1024 1024', sw:16, zonas:zonas, blancas:true };
+      }
+    }
+    return genMondrian(lv);
+  }
+
+  // ---------- Klee: mosaico de filas, con techos y un sol arriba ----------
+  function genKlee(lv) {
+    var cfg = [{ f:3, c:3, diag:0, techo:.5 }, { f:4, c:4, diag:.2, techo:.6 }, { f:5, c:5, diag:.3, techo:.7 }][lv];
+    var pal = ['orange', 'jaune', 'rouge', 'rose', 'vert', 'ciel', 'violet', 'marron'].slice(0, [5, 6, 8][lv]);
+    var altos = pesos(cfg.f, .7, 1.3, 1000), celdas = [], y = 0;
+    altos.forEach(function (h, fi) {
+      var x = 0;
+      pesos(cfg.c, .6, 1.4, 1000).forEach(function (w) { celdas.push({ x:x, y:y, w:w, h:h, fila:fi, zonas:[] }); x += w; });
+      y += h;
+    });
+    var zonas = [];
+    function add(z, celda) { z.c = null; celda.zonas.push(zonas.length); zonas.push(z); }
+    var arriba = celdas.filter(function (c) { return c.fila === 0; });
+    var sol = pick(arriba);
+    celdas.forEach(function (c) {
+      var x = c.x, y = c.y, w = c.w, h = c.h, m = Math.min(w, h);
+      if (c === sol) {
+        var r = m * .32;
+        add({ t:'rect', x:x, y:y, w:w, h:h, lx:x + w * .14, ly:y + h * .84, fs:clamp(m * .14, 26, 60) }, c);
+        add({ t:'circle', cx:x + w / 2, cy:y + h / 2, r:r, lx:x + w / 2, ly:y + h / 2, fs:clamp(r * .6, 26, 70), sol:true }, c);
+      } else if (c.fila === 0 && rnd() < cfg.techo) {
+        var xm = x + w / 2;
+        add({ t:'poly', pts:[[x, y], [xm, y], [x, y + h]], lx:x + w / 6 + 4, ly:y + h / 3, fs:clamp(Math.min(w / 2, h) * .22, 24, 52) }, c);
+        add({ t:'poly', pts:[[xm, y], [x + w, y], [x + w, y + h]], lx:x + w * 5 / 6 - 4, ly:y + h / 3, fs:clamp(Math.min(w / 2, h) * .22, 24, 52) }, c);
+        add({ t:'poly', pts:[[x, y + h], [xm, y], [x + w, y + h]], lx:xm, ly:y + h * 2 / 3, fs:clamp(m * .26, 26, 70) }, c);
+      } else if (rnd() < cfg.diag) {
+        add({ t:'poly', pts:[[x, y], [x + w, y], [x, y + h]], lx:x + w / 3, ly:y + h / 3, fs:clamp(m * .2, 24, 56) }, c);
+        add({ t:'poly', pts:[[x + w, y], [x + w, y + h], [x, y + h]], lx:x + w * 2 / 3, ly:y + h * 2 / 3, fs:clamp(m * .2, 24, 56) }, c);
+      } else {
+        add({ t:'rect', x:x, y:y, w:w, h:h, lx:x + w / 2, ly:y + h / 2, fs:clamp(m * .3, 26, 70) }, c);
+      }
+    });
+    var adj = vecinosVacios(zonas.length);
+    celdas.forEach(function (a, ia) {
+      a.zonas.forEach(function (i) { a.zonas.forEach(function (j) { unir(adj, i, j); }); });
+      celdas.forEach(function (b, ib) {
+        if (ib > ia && rectsTocan(a, b)) a.zonas.forEach(function (i) { b.zonas.forEach(function (j) { unir(adj, i, j); }); });
+      });
+    });
+    zonas.forEach(function (z) { if (z.sol) z.c = pick(['jaune', 'orange']); });
+    colorear(zonas, adj, pal, shuffle(zonas.map(function (_, i) { return i; })).filter(function (i) { return !zonas[i].sol; }));
+    return { tipo:'color', vb:'-5 -5 1010 1010', sw:6, zonas:zonas };
+  }
+
+  // ---------- Kandinsky: cuadrados con círculos concéntricos ----------
+  function genKandinsky(lv) {
+    var cfg = [{ n:2, k:2 }, { n:3, k:2 }, { n:3, k:3 }][lv];
+    var pal = ['rouge', 'jaune', 'bleu', 'vert', 'orange', 'violet', 'rose', 'ciel'].slice(0, [6, 8, 8][lv]);
+    var radios = cfg.k === 2 ? [.42, .24] : [.43, .30, .16];
+    var s = 1000 / cfg.n, zonas = [], adj, cuad = [];
+    for (var fy = 0; fy < cfg.n; fy++) for (var fx = 0; fx < cfg.n; fx++) {
+      var x = fx * s, y = fy * s, cx = x + s / 2 + (rnd() - .5) * s * .08, cy = y + s / 2 + (rnd() - .5) * s * .08;
+      var ids = [zonas.length];
+      zonas.push({ t:'rect', x:x, y:y, w:s, h:s, lx:x + s * .1, ly:y + s * .11, fs:clamp(s * .075, 24, 46) });
+      radios.forEach(function (f, k) {
+        var r = s * f, sig = radios[k + 1] ? s * radios[k + 1] : 0, m = (r + sig) / 2, ang = sig ? rnd() * Math.PI * 2 : 0;
+        ids.push(zonas.length);
+        zonas.push({ t:'circle', cx:cx, cy:cy, r:r, lx:cx + m * Math.cos(ang), ly:cy + m * Math.sin(ang), fs:clamp((r - sig) * .55, 22, 60) });
+      });
+      cuad.push({ x:x, y:y, w:s, h:s, ids:ids });
+    }
+    adj = vecinosVacios(zonas.length);
+    cuad.forEach(function (q, iq) {
+      for (var k = 0; k + 1 < q.ids.length; k++) unir(adj, q.ids[k], q.ids[k + 1]);
+      cuad.forEach(function (o, io) { if (io > iq && rectsTocan(q, o)) unir(adj, q.ids[0], o.ids[0]); });
+    });
+    colorear(zonas, adj, pal);
+    return { tipo:'color', vb:'-4 -4 1008 1008', sw:5, zonas:zonas };
+  }
+
+  // ---------- Mandala: anillos con borde de pétalos, cortados en sectores ----------
+  // Borde k: r(θ) = R + A·|sin(N(θ−φ)/2)|^0.6 (N pétalos, valles en φ + 2πj/N). Cada anillo se corta en los valles
+  // de su borde exterior: cada zona es un pétalo entero, sin huecos ni pedazos sueltos.
+  function genMandala(lv) {
+    var cfg = [{ n:6, an:3, r0:95, alt:0 }, { n:8, an:4, r0:85, alt:.7 }, { n:12, an:5, r0:75, alt:.8 }][lv];
+    var pal = ['rouge', 'jaune', 'bleu', 'vert', 'orange', 'violet', 'rose', 'ciel'].slice(0, [6, 8, 8][lv]);
+    var C = 500, RMAX = 470, th = (RMAX - cfg.r0) / cfg.an, PI2 = Math.PI * 2;
+    var bordes = [{ R:cfg.r0, A:0, N:1, f:0 }];
+    for (var k = 1; k <= cfg.an; k++) {
+      var N = lv > 0 && k === 1 ? cfg.n / 2 : cfg.n, A = th * .45;
+      bordes.push({ R:cfg.r0 + k * th - A, A:A, N:N, f:(k % 2) * Math.PI / N + (rnd() - .5) * .1 });
+    }
+    function rad(b, a) { return b.R + b.A * Math.pow(Math.abs(Math.sin(b.N * (a - b.f) / 2)), .6); }
+    function pt(r, a) { return [C + r * Math.cos(a - Math.PI / 2), C + r * Math.sin(a - Math.PI / 2)]; }
+    var zonas = [{ t:'circle', cx:C, cy:C, r:cfg.r0, lx:C, ly:C, fs:clamp(cfg.r0 * .55, 30, 60) }];
+    var colAnterior = [zonas[0].c = pick(pal)];
+    for (k = 1; k <= cfg.an; k++) {
+      var ext = bordes[k], int = bordes[k - 1], libres = shuffle(pal.filter(function (c) { return colAnterior.indexOf(c) < 0; }));
+      var par = rnd() < cfg.alt ? [libres[0], libres[1]] : [libres[0]];
+      for (var j = 0; j < ext.N; j++) {
+        var a0 = ext.f + PI2 * j / ext.N, a1 = a0 + PI2 / ext.N, am = (a0 + a1) / 2, pts = [], S = 24, s;
+        for (s = 0; s <= S; s++) { var a = a0 + (a1 - a0) * s / S; pts.push(pt(rad(ext, a), a)); }
+        for (s = S; s >= 0; s--) { a = a0 + (a1 - a0) * s / S; pts.push(pt(rad(int, a), a)); }
+        var ri = rad(int, am), re = rad(ext, am), lab = pt((ri + re) / 2, am);
+        var ancho = Math.min(re - ri, (ri + re) / 2 * PI2 / ext.N);
+        zonas.push({ t:'poly', pts:pts, lx:lab[0], ly:lab[1], fs:clamp(ancho * .38, 22, 56), c:par[j % par.length] });
+      }
+      colAnterior = par;
+    }
+    return { tipo:'color', vb:'20 20 960 960', sw:5, zonas:zonas };
+  }
+
+  // ---------- Miroir magique: figura espejo, la mitad derecha la completa el niño ----------
+  function genSimetria(lv) {
+    var cfg = [{ n:6, k:1 }, { n:8, k:2 }, { n:10, k:3 }][lv], n = cfg.n, h = n / 2;
+    var pal = shuffle(['rouge', 'bleu', 'vert', 'orange', 'violet']).slice(0, cfg.k);
+    for (var intento = 0; intento < 200; intento++) {
+      var on = [], tot = 0, junto = 0;
+      for (var r = 0; r < n; r++) for (var c = 0; c < h; c++) {
+        var v = rnd() < .5; on[r * n + c] = v; on[r * n + (n - 1 - c)] = v;
+        if (v) { tot++; if (c === h - 1) junto++; }
+      }
+      var dens = tot / (n * h);
+      if (dens < .38 || dens > .62 || junto < n / 3) continue;
+      var vacias = 0; // ninguna fila ni columna de la mitad izquierda totalmente vacía
+      for (r = 0; r < n; r++) { var alguna = false; for (c = 0; c < h; c++) alguna = alguna || on[r * n + c]; if (!alguna) vacias++; }
+      for (c = 0; c < h; c++) { alguna = false; for (r = 0; r < n; r++) alguna = alguna || on[r * n + c]; if (!alguna) vacias++; }
+      if (vacias) continue;
+      var celdas = on.map(function (v, i) { return v ? pal[Math.min(cfg.k - 1, Math.floor(Math.floor(i / n) / (n / cfg.k)))] : null; });
+      return { tipo:'sym', n:n, celdas:celdas };
+    }
+    return genSimetria(lv);
+  }
+
+  // ---------- Labyrinthe: laberinto perfecto (una sola ruta), port de Bystrá mysl ----------
+  function genLaberinto(lv) {
+    var n = [6, 9, 13][lv], walls = [], seen = new Array(n * n).fill(false);
+    for (var i = 0; i < n * n; i++) walls.push([1, 1, 1, 1]); // [arriba, derecha, abajo, izquierda]
+    var D = [[0, -1, 0, 2], [1, 0, 1, 3], [0, 1, 2, 0], [-1, 0, 3, 1]];
+    var stack = [0]; seen[0] = true;
+    while (stack.length) {
+      var cur = stack[stack.length - 1], x = cur % n, y = Math.floor(cur / n);
+      var opts = D.filter(function (d) { var nx = x + d[0], ny = y + d[1]; return nx >= 0 && ny >= 0 && nx < n && ny < n && !seen[ny * n + nx]; });
+      if (!opts.length) { stack.pop(); continue; }
+      var d = pick(opts), nxt = (y + d[1]) * n + x + d[0];
+      walls[cur][d[2]] = 0; walls[nxt][d[3]] = 0; seen[nxt] = true; stack.push(nxt);
+    }
+    walls[0][0] = 0; walls[n * n - 1][2] = 0;
+    var prev = new Array(n * n).fill(-1), q = [0]; prev[0] = 0;
+    while (q.length) {
+      var c0 = q.shift(), cx = c0 % n, cy = Math.floor(c0 / n);
+      D.forEach(function (d) {
+        if (walls[c0][d[2]]) return;
+        var nx = cx + d[0], ny = cy + d[1];
+        if (nx < 0 || ny < 0 || nx >= n || ny >= n) return;
+        var ni = ny * n + nx;
+        if (prev[ni] < 0) { prev[ni] = c0; q.push(ni); }
+      });
+    }
+    var path = [n * n - 1];
+    while (path[path.length - 1] !== 0) path.push(prev[path[path.length - 1]]);
+    return { tipo:'maze', n:n, walls:walls, path:path.reverse() };
+  }
+
+  var GEN = { mondrian:genMondrian, klee:genKlee, kandinsky:genKandinsky, mandala:genMandala, symetrie:genSimetria, labyrinthe:genLaberinto };
+  function generar(act, lv) {
+    var a = act === 'surprise' ? pick(ACTIVIDADES) : act;
+    var m = GEN[a](lv);
+    m.act = a; m.code = code();
+    // números de la leyenda: 1, 2, 3… en el orden fijo de los colores usados
+    var lista = m.tipo === 'color' ? m.zonas.map(function (z) { return z.c; }) : (m.celdas || []);
+    m.usados = ORDEN.filter(function (c) { return lista.indexOf(c) >= 0; });
+    m.num = {}; m.usados.forEach(function (c, i) { m.num[c] = i + 1; });
+    return m;
+  }
+
+  // ---------- dibujo ----------
+  function num(x, y, fs, t) {
+    return '<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" font-size="' + Math.round(fs) +
+      '" font-family="Nunito,Arial,sans-serif" font-weight="700" fill="#333" text-anchor="middle" dominant-baseline="central">' + t + '</text>';
+  }
+  function svgColor(m, enColor) {
+    var out = '<svg class="art" viewBox="' + m.vb + '" xmlns="http://www.w3.org/2000/svg">';
+    var st = ' stroke="#111" stroke-width="' + m.sw + '" stroke-linejoin="round"';
+    m.zonas.forEach(function (z) {
+      var f = ' fill="' + (enColor && z.c ? COL[z.c] : '#fff') + '"';
+      if (z.t === 'rect') out += '<rect x="' + z.x + '" y="' + z.y + '" width="' + z.w + '" height="' + z.h + '"' + f + st + '/>';
+      else if (z.t === 'circle') out += '<circle cx="' + z.cx.toFixed(1) + '" cy="' + z.cy.toFixed(1) + '" r="' + z.r.toFixed(1) + '"' + f + st + '/>';
+      else out += '<polygon points="' + z.pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ') + '"' + f + st + '/>';
+    });
+    if (!enColor) m.zonas.forEach(function (z) { if (z.c) out += num(z.lx, z.ly, z.fs, m.num[z.c]); });
+    return out + '</svg>';
+  }
+  function svgSimetria(m, completo) {
+    var n = m.n, s = 100, out = '<svg class="art" viewBox="-6 -6 ' + (n * s + 12) + ' ' + (n * s + 12) + '" xmlns="http://www.w3.org/2000/svg">';
+    for (var i = 0; i < n * n; i++) {
+      var r = Math.floor(i / n), c = i % n, col = m.celdas[i], ver = col && (completo || c < n / 2);
+      out += '<rect x="' + c * s + '" y="' + r * s + '" width="' + s + '" height="' + s + '" fill="' + (ver ? COL[col] : '#fff') + '" stroke="#999" stroke-width="3"/>';
+      if (ver && !completo) out += num(c * s + s / 2, r * s + s / 2, 44, m.num[col]).replace('fill="#333"', 'fill="#fff"');
+    }
+    out += '<rect x="0" y="0" width="' + n * s + '" height="' + n * s + '" fill="none" stroke="#111" stroke-width="8"/>';
+    out += '<line x1="' + n * s / 2 + '" y1="-6" x2="' + n * s / 2 + '" y2="' + (n * s + 6) + '" stroke="#d62828" stroke-width="10" stroke-dasharray="26 14"/>';
+    return out + '</svg>';
+  }
+  function svgLaberinto(m, conSolucion) {
+    var n = m.n, s = 60, mg = 70, size = n * s + 2 * mg, lines = '';
+    var out = '<svg class="art" viewBox="0 0 ' + size + ' ' + size + '" xmlns="http://www.w3.org/2000/svg">';
+    for (var i = 0; i < n * n; i++) {
+      var x = mg + (i % n) * s, y = mg + Math.floor(i / n) * s, w = m.walls[i];
+      if (w[0]) lines += 'M' + x + ' ' + y + 'h' + s;
+      if (w[3]) lines += 'M' + x + ' ' + y + 'v' + s;
+      if (i % n === n - 1 && w[1]) lines += 'M' + (x + s) + ' ' + y + 'v' + s;
+      if (Math.floor(i / n) === n - 1 && w[2]) lines += 'M' + x + ' ' + (y + s) + 'h' + s;
+    }
+    if (conSolucion) {
+      var pts = m.path.map(function (i) { return (mg + (i % n) * s + s / 2) + ',' + (mg + Math.floor(i / n) * s + s / 2); });
+      pts.unshift((mg + s / 2) + ',' + (mg - 20)); pts.push((mg + (n - 1) * s + s / 2) + ',' + (mg + n * s + 20));
+      out += '<polyline points="' + pts.join(' ') + '" stroke="#d62828" stroke-width="' + s * .3 + '" fill="none" stroke-linejoin="round" stroke-linecap="round"/>';
+    }
+    out += '<path d="' + lines + '" stroke="#111" stroke-width="' + (n > 10 ? 6 : 8) + '" stroke-linecap="square" fill="none"/>';
+    out += '<text x="' + (mg + s / 2) + '" y="' + (mg - 18) + '" font-size="34" text-anchor="middle">🖌️</text>';
+    out += '<text x="' + (mg + s + 10) + '" y="' + (mg - 22) + '" font-size="22" font-weight="700" font-family="Nunito,Arial,sans-serif">Start</text>';
+    out += '<text x="' + (mg + (n - 1) * s + s / 2) + '" y="' + (mg + n * s + 52) + '" font-size="34" text-anchor="middle">🎨</text>';
+    out += '<text x="' + (mg + (n - 1) * s - 10) + '" y="' + (mg + n * s + 34) + '" font-size="22" font-weight="700" text-anchor="end" font-family="Nunito,Arial,sans-serif">Finish</text>';
+    return out + '</svg>';
+  }
+  function dibujo(m, solucion) {
+    if (m.tipo === 'sym') return svgSimetria(m, solucion);
+    if (m.tipo === 'maze') return svgLaberinto(m, solucion);
+    return svgColor(m, solucion);
+  }
+  var REGLA = {
+    color: 'Color each shape with the color of its number.',
+    sym: 'Color the squares on the right so the drawing looks the same on both sides, like in a mirror. Each square gets the color of the square on the other side.',
+    maze: 'Help the paintbrush find its palette: draw the path from start to finish.'
+  };
+  function titulo(nombre) { return nombre ? esc(nombre) + '’s Masterpiece' : 'My Masterpiece'; }
+  function hoja(m, nombre, jour) {
+    var a = ACT[m.act], ley = '';
+    if (m.tipo !== 'maze') {
+      ley = m.usados.map(function (c) { return '<span><i style="background:' + COL[c] + '"></i>' + m.num[c] + ' = ' + NOM[c] + '</span>'; }).join('');
+      if (m.blancas) ley += '<span class="white">Shapes without a number stay white.</span>';
+      ley = '<div class="legend">' + ley + '</div>';
+    }
+    return '<div class="sheet"><div class="sheet-head"><b>' + titulo(nombre) + '</b><span>' + (jour ? jour + ' · ' : '') + a.titre + ' · No. ' + m.code + '</span></div>' +
+      '<p class="rule">' + REGLA[m.tipo] + '</p>' + dibujo(m, false) + ley + '<p class="foot">' + a.dato + '</p></div>';
+  }
+  function modelos(lista) {
+    var out = '';
+    for (var i = 0; i < lista.length; i += 4) {
+      out += '<div class="models"><h2>Answer key</h2><div class="grid">' + lista.slice(i, i + 4).map(function (m) {
+        return '<div><h3>No. ' + m.code + ' · ' + ACT[m.act].corto + '</h3>' + dibujo(m, true) + '</div>';
+      }).join('') + '</div></div>';
+    }
+    return out;
+  }
+  function lunes() {
+    var d = new Date(); d.setDate(d.getDate() - (d.getDay() + 6) % 7);
+    return d.toLocaleDateString('en-US', { day:'numeric', month:'long', year:'numeric' });
+  }
+  function portada(nombre) {
+    var filas = SEMANA.map(function (a, i) { return '<tr><td class="box">☐</td><td><b>' + JOURS[i] + '</b></td><td>' + ACT[a].jour + '</td></tr>'; }).join('');
+    return '<div class="sheet"><div class="cover"><p class="brand">Little Artists</p><h2>My Art Week</h2>' +
+      '<p class="who">' + (nombre ? esc(nombre) : '&nbsp;') + '</p><p class="when">Week of ' + lunes() + '</p>' +
+      '<table>' + filas + '</table><p class="foot">Check off one box every day. At the end of the week, your certificate is waiting for you!</p></div></div>';
+  }
+  function diploma(nombre) {
+    return '<div class="sheet"><div class="diplome"><p class="brand">Little Artists</p><div class="stars">★ ★ ★</div>' +
+      '<h2>Little Artist Certificate</h2><p>proudly awarded to</p><p class="who">' + (nombre ? esc(nombre) : '______________________') + '</p>' +
+      '<p>for finishing a whole week of art,<br>just like the great painters Mondrian, Klee and Kandinsky.</p>' +
+      '<p>Week of ' + lunes() + '</p><p class="sign">Signature: ______________________</p></div></div>';
+  }
+  function semana(lv) {
+    return SEMANA.map(function (a) { return generar(a, lv); });
+  }
+
+  // ---------- panel ----------
+  var st = { typ:'mondrian', lvl:0, cnt:5, verModelo:false, actual:null, semana:null };
+  var who = document.getElementById('who');
+  try { who.value = localStorage.getItem('atelier-nom') || ''; } catch (e) {}
+  function nombre() { return who.value.trim(); }
+  function grupo(id, key, esNum) {
+    var g = document.getElementById(id);
+    g.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      g.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      st[key] = esNum ? Number(b.dataset.v) : b.dataset.v;
+      if (key !== 'cnt') nueva();
+    });
+  }
+  function pintar() {
+    var carnet = st.typ === 'carnet', m = st.actual, html;
+    document.getElementById('cntBox').className = carnet ? 'off' : '';
+    document.getElementById('btnModel').className = 'alt' + (carnet ? ' off' : '');
+    if (carnet) html = portada(nombre());
+    else if (st.verModelo) html = '<div class="sheet"><div class="sheet-head"><b>' + (m.tipo === 'color' ? 'The finished picture' : 'The answer') +
+      '</b><span>No. ' + m.code + '</span></div>' + dibujo(m, true) + '</div>';
+    else html = hoja(m, nombre());
+    document.getElementById('preview').innerHTML = html;
+    document.getElementById('btnModel').textContent = st.verModelo ? '✏️ Back to the page' : '👁️ Show the answer';
+  }
+  function nueva() {
+    if (st.typ === 'carnet') st.semana = semana(st.lvl); else st.actual = generar(st.typ, st.lvl);
+    st.verModelo = false; pintar();
+  }
+  function paginas() {
+    var n = nombre();
+    if (st.typ === 'carnet') {
+      return portada(n) + st.semana.map(function (m, i) { return hoja(m, n, JOURS[i]); }).join('') + diploma(n) + modelos(st.semana);
+    }
+    var lista = [st.actual];
+    while (lista.length < st.cnt) lista.push(generar(st.typ, st.lvl));
+    return lista.map(function (m) { return hoja(m, n); }).join('') + modelos(lista);
+  }
+  grupo('typ', 'typ', false); grupo('lvl', 'lvl', true); grupo('cnt', 'cnt', true);
+  who.addEventListener('input', function () { try { localStorage.setItem('atelier-nom', nombre()); } catch (e) {} if (!st.verModelo) pintar(); });
+  document.getElementById('btnNew').addEventListener('click', nueva);
+  document.getElementById('btnModel').addEventListener('click', function () { st.verModelo = !st.verModelo; pintar(); });
+  document.getElementById('btnPrint').addEventListener('click', function () {
+    document.getElementById('print').innerHTML = paginas();
+    window.print();
+  });
+  window.__atelier = { generar:generar, dibujo:dibujo, hoja:hoja, modelos:modelos, portada:portada, diploma:diploma, semana:semana, st:st, nueva:nueva };
+  nueva();
+})();
+</script>
+</body>
+</html>
