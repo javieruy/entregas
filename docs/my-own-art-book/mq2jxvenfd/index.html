@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>My Own Art Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>/* My Own Art Book · estilo de la tapa B (2026-11-23): Baloo 2 con borde blanco, oro, cintas y sello */
+@page { size: 297mm 210mm; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --gold: linear-gradient(135deg,#9a7418 0%,#f0d27a 22%,#c99a2e 42%,#fff2bd 58%,#d4a63c 76%,#9a7418 100%);
+        --blue: #2f4fb8; --red: #e4505a; --ink: #3a2f22; --cream: #fffcf6; }
+body { font-family: 'Nunito', sans-serif; color: var(--ink); background: #1b2a4a; }
+
+/* ---------- barra (solo pantalla) ---------- */
+.bar { position: sticky; top: 0; z-index: 5; background: #1b2a4a; color: #fdf6e3; padding: 12px 14px; text-align: center;
+       box-shadow: 0 2px 10px rgba(0,0,0,.35); }
+.bar h1 { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 24px; color: #f2c94c; margin-bottom: 6px; }
+.bar .row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; align-items: center; }
+.bar input { font: 700 18px 'Nunito', sans-serif; padding: 10px 14px; border-radius: 10px; border: 0; width: 220px; max-width: 60vw; }
+#print { font: 800 17px 'Nunito', sans-serif; padding: 10px 20px; border-radius: 10px; border: 0; cursor: pointer;
+         background: linear-gradient(#22c55e,#15803d); color: #fff; }
+.bar p { font-size: 13px; opacity: .85; margin-top: 8px; }
+
+/* ---------- hojas ---------- */
+.sheets { padding: 18px 0 40px; }
+.page { width: 297mm; height: 210mm; position: relative; overflow: hidden; background: var(--cream); margin: 0 auto 18px;
+        box-shadow: 0 6px 22px rgba(0,0,0,.4); break-after: page; }
+@media screen { .page { zoom: var(--z, 1); } }
+@media print {
+  body { background: #fff; }
+  .bar { display: none; }
+  .sheets { padding: 0; }
+  .page { margin: 0; box-shadow: none; zoom: 1; }
+  .page:last-child { break-after: auto; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+/* borde dorado doble, como el panel de la tapa */
+.page.gb::before { content: ""; position: absolute; inset: 7mm; border-radius: 7mm; pointer-events: none;
+                   box-shadow: inset 0 0 0 1mm #d4a63c, inset 0 0 0 2.2mm var(--cream), inset 0 0 0 2.7mm #c99a2e; }
+img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.nm, .ab, h2, h3, .kick, .num, .tab span, .t-top { font-family: 'Baloo 2', sans-serif; font-weight: 800; }
+.nm, .ab { line-height: .95; white-space: nowrap; display: block; }
+.white { -webkit-text-stroke: 2.2mm #fff; paint-order: stroke fill; filter: drop-shadow(0 1.1mm 0 rgba(60,30,90,.16)); }
+.inl { display: inline; }
+[data-fit] { white-space: nowrap; }
+.line { display: inline-block; border-bottom: .5mm solid var(--ink); width: 70mm; height: 6mm; vertical-align: bottom; }
+.line.short { width: 22mm; }
+.line.long { width: 86mm; }
+.gdiv { display: flex; align-items: center; justify-content: center; gap: 3mm; margin: 5mm 0 4mm; }
+.gdiv::before, .gdiv::after { content: ""; width: 26mm; height: .6mm; background: var(--gold); }
+.gstar { width: 7mm; height: 7mm; display: block; }
+.seal { position: absolute; width: 32mm; height: 32mm; filter: drop-shadow(0 1.5mm 1.5mm rgba(0,0,0,.28)); }
+.ribbon { position: absolute; height: 20mm; }
+.ribbon svg { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 1.2mm 1mm rgba(0,0,0,.22)); }
+.ribbon span { position: relative; display: flex; height: 85%; align-items: center; justify-content: center; color: #fff;
+               font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 6.2mm; white-space: nowrap; }
+.kick { color: #2f7d3a; }
+
+/* ---------- tapa (variante B) ---------- */
+.cover .panel { position: absolute; left: 12mm; top: 18mm; width: 120mm; height: 174mm; border-radius: 9mm; background: rgba(255,252,246,.93);
+                box-shadow: 0 3mm 8mm rgba(80,50,30,.25), inset 0 0 0 1.2mm #d4a63c, inset 0 0 0 2.4mm #fffaf0, inset 0 0 0 2.9mm #c99a2e; }
+.cover .ctxt { position: absolute; left: 18mm; width: 108mm; top: 44mm; text-align: center; }
+.cover .nm { font-size: 28mm; color: var(--blue); }
+.cover .ab { font-size: 27mm; color: var(--red); margin-top: 1mm; }
+.cover .gdiv { margin: 6mm 0 5mm; }
+.cover .sub { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 6.2mm; color: #6a4f2e; }
+.r-cover { left: 22mm; width: 100mm; top: 130mm; }
+.cover .seal { left: 56mm; top: 153mm; }
+
+/* ---------- this book belongs to ---------- */
+.belongs { padding: 18mm 24mm; text-align: center; }
+.belongs .kick { font-size: 11mm; line-height: 1; }
+.belongs .big { font-size: 34mm; color: var(--blue); width: 249mm; height: 34mm; margin: 3mm auto 0; }
+.belongs .gdiv { margin: 3mm 0 0; }
+.belongs .cols { display: flex; gap: 14mm; margin-top: 8mm; text-align: left; }
+.fields { flex: 1; font-size: 6mm; font-weight: 800; }
+.fields p { margin-bottom: 7mm; }
+.fields .line { width: 60mm; }
+.fields .line.short { width: 22mm; }
+.blob { width: 70mm; height: 32mm; border: .8mm dashed var(--ink); border-radius: 50% 45% 55% 40% / 55% 45% 50% 45%;
+        display: flex; align-items: center; justify-content: center; font-size: 4mm; color: #a99f86; font-weight: 700; margin-top: -3mm; }
+.sign { flex: 1; background: #fff7e4; border-radius: 5mm; padding: 6mm 8mm; box-shadow: inset 0 0 0 .6mm #d4a63c; }
+.sign .ttl { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 8mm; color: var(--red); line-height: 1.1; }
+.sign .note { font-size: 4.2mm; font-weight: 700; color: #5a4f30; margin: 1mm 0 4mm; }
+.sign-box { height: 24mm; border-bottom: .6mm solid var(--ink); margin-bottom: 4mm; }
+
+/* ---------- dedicatoria ---------- */
+.dedic { display: flex; align-items: center; justify-content: center; background: #fbf3e4; }
+.dedic .card { position: relative; width: 206mm; background: var(--cream); border-radius: 8mm; padding: 22mm 20mm 14mm; text-align: center;
+               box-shadow: 0 2mm 6mm rgba(80,50,30,.18), inset 0 0 0 1.2mm #d4a63c, inset 0 0 0 2.4mm #fffaf0, inset 0 0 0 2.9mm #c99a2e; }
+.r-dedic { left: 48mm; width: 110mm; top: -9mm; }
+.dedic .for { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 20mm; color: var(--blue); line-height: 1; white-space: nowrap; }
+.dedic .for .nm { color: var(--red); }
+.dedic .lines span { display: block; height: 12mm; border-bottom: .5mm solid #d6c8a2; }
+.dedic .lines { margin: 4mm 0 8mm; }
+.dedic .from, .dedic .date { font-size: 6mm; font-weight: 800; text-align: left; margin-top: 4mm; }
+.dedic .from .line { width: 120mm; }
+.dedic .date .line { width: 50mm; }
+
+/* ---------- separadores ---------- */
+.divider { padding: 12mm 34mm 10mm 14mm; }
+.divider .tab { position: absolute; top: 0; right: 0; bottom: 0; width: 22mm; background: var(--c); display: flex;
+                align-items: center; justify-content: center; box-shadow: inset 1.2mm 0 0 #d4a63c; }
+.divider .tab span { writing-mode: vertical-rl; color: #fff; font-size: 7mm; white-space: nowrap; }
+.divider .head { display: flex; align-items: center; gap: 6mm; }
+.divider .num { flex: none; width: 24mm; height: 24mm; border-radius: 50%; background: var(--c); color: #fff;
+                font-size: 15mm; display: flex; align-items: center; justify-content: center; padding-top: 1.5mm;
+                box-shadow: 0 0 0 1mm #fff, 0 0 0 1.8mm #d4a63c; }
+.divider h2 { font-size: 13mm; color: var(--c); line-height: 1.05; -webkit-text-stroke-width: 1.6mm; }
+.divider .head p { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 5mm; color: #6a4f2e; margin-top: 1mm; }
+.minis { display: flex; gap: 5mm; margin: 6mm 0 5mm; height: 46mm; }
+.mini { flex: 1; padding: 2mm; background: var(--gold); box-shadow: 0 1.2mm 2.5mm rgba(60,40,0,.25), inset 0 0 0 .4mm #7a5a14; }
+.mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.list { display: flex; gap: 8mm; }
+.list ol { flex: 1; list-style: none; }
+.list li { display: flex; align-items: baseline; gap: 2.5mm; padding: .7mm 0; border-bottom: .3mm dotted #e0cc96;
+           font-size: 3.6mm; line-height: 1.3; }
+.list li b { flex: none; width: 8mm; text-align: right; font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--c); }
+.list li .t { font-weight: 800; color: #2a2a52; }
+.list li .a { margin-left: auto; color: #2f7d3a; font-weight: 700; white-space: nowrap; font-size: 3.3mm; padding-left: 2mm; }
+
+/* ---------- lomos ---------- */
+.spines { padding: 16mm 14mm; }
+.spines h2, .tags h2, .guide h2 { font-size: 11mm; color: var(--blue); line-height: 1; margin-bottom: 4mm; -webkit-text-stroke-width: 1.6mm; }
+.tags h2 small { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 4.2mm; color: #5a4f30; -webkit-text-stroke: 0; }
+.spine-row { margin-bottom: 5mm; }
+.spine-row .lbl { font-size: 3.6mm; font-weight: 800; color: #5a4f30; margin-bottom: 1.5mm; }
+.spine { width: 265mm; border: .5mm dashed var(--ink); background: #fbf3e4; display: flex; align-items: center; justify-content: center;
+         gap: 7mm; overflow: hidden; }
+.s-name { font-family: 'Baloo 2', sans-serif; font-weight: 800; color: var(--blue); font-size: 10mm; white-space: nowrap; -webkit-text-stroke-width: 1.4mm; }
+.s-sub { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--red); font-size: 5.5mm; white-space: nowrap; }
+.sp-star { width: 6mm; height: 6mm; }
+.spine[style*="25.4"] .s-name { font-size: 8.4mm; }
+.spine[style*="25.4"] .s-sub { font-size: 4.6mm; }
+
+/* ---------- etiquetas ---------- */
+.tags { padding: 16mm 16mm; }
+.tags .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; height: 150mm; }
+.tag { position: relative; border: .5mm dashed var(--ink); border-radius: 4mm 22mm 22mm 4mm; padding: 9mm 14mm 6mm 20mm; background: var(--cream);
+       box-shadow: inset 0 0 0 2mm #fff, inset 0 0 0 2.5mm #d4a63c; }
+.tag.x { background: #fdf0ee; }
+.tag .hole { position: absolute; left: 7mm; top: 50%; width: 6mm; height: 6mm; margin-top: -3mm; border-radius: 50%;
+             border: .5mm solid var(--ink); background: #fff; }
+.t-top { font-size: 8.4mm; color: var(--blue); line-height: 1.1; padding-right: 16mm; white-space: nowrap; -webkit-text-stroke-width: 1.4mm; }
+.tag.x .t-top { color: var(--red); }
+.holly { width: 18mm; height: 9mm; position: absolute; right: 16mm; top: 9mm; }
+.tg-star { position: absolute; right: 16mm; top: 8mm; width: 9mm; height: 9mm; }
+.t-line { font-size: 6mm; font-weight: 800; margin-top: 7mm; display: flex; align-items: flex-end; gap: 2mm; }
+.t-line b { font-family: 'Baloo 2', sans-serif; font-weight: 800; color: #2f7d3a; white-space: nowrap; }
+.t-line .line { flex: 1; width: auto; }
+
+/* ---------- contratapa ---------- */
+.back .veil { position: absolute; inset: 0; background: rgba(255,250,240,.55); }
+.back .box { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 200mm; border-radius: 9mm; padding: 12mm 16mm;
+             text-align: center; background: rgba(255,252,246,.95);
+             box-shadow: 0 3mm 8mm rgba(80,50,30,.25), inset 0 0 0 1.2mm #d4a63c, inset 0 0 0 2.4mm #fffaf0, inset 0 0 0 2.9mm #c99a2e; }
+.back .kick { font-size: 8mm; line-height: 1; }
+.back .nm { font-size: 17mm; color: var(--blue); width: 168mm; margin: 2mm auto 0; }
+.back .gdiv { margin: 4mm 0 3mm; }
+.back .facts { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 5.4mm; color: #6a4f2e; }
+.back .dates { text-align: left; margin-top: 6mm; font-size: 5.6mm; font-weight: 800; }
+.back .dates p { margin-top: 5mm; }
+
+/* ---------- guía ---------- */
+.guide { padding: 18mm 22mm; }
+.guide ol { list-style: none; margin-top: 4mm; }
+.guide li { display: flex; gap: 6mm; align-items: flex-start; margin-bottom: 8mm; }
+.guide .n { flex: none; width: 13mm; height: 13mm; border-radius: 50%; background: var(--red); color: #fff; font-family: 'Baloo 2';
+            font-weight: 800; font-size: 7.5mm; display: flex; align-items: center; justify-content: center; padding-top: .8mm;
+            box-shadow: 0 0 0 .8mm #fff, 0 0 0 1.4mm #d4a63c; }
+.guide h3 { font-size: 7.6mm; color: var(--blue); line-height: 1.1; }
+.guide p { font-size: 5.3mm; font-weight: 700; color: #4a4230; line-height: 1.35; margin-top: .8mm; }
+</style>
+</head>
+<body>
+<div class="bar">
+  <h1>My Own Art Book</h1>
+  <div class="row">
+    <input id="name" maxlength="18" placeholder="Your child’s first name" autocomplete="off">
+    <button id="print">🖨️ Print my book kit</button>
+  </div>
+  <p>14 sheets · landscape, “fit to page”, the same settings as your book</p>
+</div>
+<div class="sheets" id="sheets">
+<section class="page cover">
+  <img class="bg" src="img/cover-girl.webp" alt="">
+  <div class="panel"></div>
+  <div class="ctxt">
+    <div class="nm white" data-fit><span data-name-s>My</span></div>
+    <div class="ab white">Art Book</div>
+    <div class="gdiv"><svg class="gstar" viewBox="0 0 24 24"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g1)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></div>
+    <p class="sub">100 masterpieces to color</p>
+  </div>
+  <div class="ribbon r-cover"><svg viewBox="0 0 240 40" preserveAspectRatio="none"><path d="M0 8h20v28H0l8-14z" fill="#b83a44"/><path d="M240 8h-20v28h20l-8-14z" fill="#b83a44"/><rect x="14" y="2" width="212" height="30" rx="3" fill="#e4505a"/><path d="M14 32l8 6v-6zM226 32l-8 6v-6z" fill="rgba(0,0,0,.35)"/></svg><span>A gift for a little artist</span></div>
+  <svg class="seal" viewBox="0 0 120 120"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><polygon points="110.0,60.0 105.1,65.9 108.3,72.9 102.0,77.4 103.3,85.0 96.1,87.7 95.4,95.4 87.7,96.1 85.0,103.3 77.4,102.0 72.9,108.3 65.9,105.1 60.0,110.0 54.1,105.1 47.1,108.3 42.6,102.0 35.0,103.3 32.3,96.1 24.6,95.4 23.9,87.7 16.7,85.0 18.0,77.4 11.7,72.9 14.9,65.9 10.0,60.0 14.9,54.1 11.7,47.1 18.0,42.6 16.7,35.0 23.9,32.3 24.6,24.6 32.3,23.9 35.0,16.7 42.6,18.0 47.1,11.7 54.1,14.9 60.0,10.0 65.9,14.9 72.9,11.7 77.4,18.0 85.0,16.7 87.7,23.9 95.4,24.6 96.1,32.3 103.3,35.0 102.0,42.6 108.3,47.1 105.1,54.1" fill="url(#g2)"/><circle cx="60" cy="60" r="38" fill="none" stroke="#8a6512" stroke-width="1.2" stroke-dasharray="2 2.5"/><text x="60" y="64" text-anchor="middle" font-family="&#39;Baloo 2&#39;, sans-serif" font-weight="800" font-size="34" fill="#6b4c0c">100</text><text x="60" y="82" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="600" font-size="10.5" fill="#6b4c0c" letter-spacing=".6">MASTERPIECES</text></svg>
+</section>
+<section class="page gb belongs">
+  <p class="kick">This book belongs to</p>
+  <div class="nm white big" data-fit><span data-name data-empty=" ">&nbsp;</span></div>
+  <div class="gdiv"><svg class="gstar" viewBox="0 0 24 24"><defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g3)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></div>
+  <div class="cols">
+    <div class="fields">
+      <p>I am <span class="line short"></span> years old.</p>
+      <p>I started this book on <span class="line"></span></p>
+      <p>My favorite color is</p>
+      <div class="blob"><span>color it here</span></div>
+    </div>
+    <div class="sign">
+      <p class="ttl">My artist signature</p>
+      <p class="note">Every great painter signs their work. Practice yours here!</p>
+      <div class="sign-box"></div>
+      <div class="sign-box"></div>
+    </div>
+  </div>
+</section>
+<section class="page gb dedic">
+  <div class="card">
+    <div class="ribbon r-dedic"><svg viewBox="0 0 240 40" preserveAspectRatio="none"><path d="M0 8h20v28H0l8-14z" fill="#b83a44"/><path d="M240 8h-20v28h20l-8-14z" fill="#b83a44"/><rect x="14" y="2" width="212" height="30" rx="3" fill="#e4505a"/><path d="M14 32l8 6v-6zM226 32l-8 6v-6z" fill="rgba(0,0,0,.35)"/></svg><span>A gift for a little artist</span></div>
+    <div class="for">For <span class="nm white inl" data-name data-empty="__________">__________</span></div>
+    <div class="lines"><span></span><span></span><span></span><span></span></div>
+    <p class="from">With love, <span class="line"></span></p>
+    <p class="date">Date: <span class="line short"></span></p>
+  </div>
+</section>
+<section class="page divider" style="--c:#2f7d3a">
+  <div class="tab"><span>1 · Middle Ages and Renaissance</span></div>
+  <div class="head">
+    <div class="num">1</div>
+    <div><h2 class="white">Middle Ages and Renaissance</h2><p>Sheets 1–12 · c. 1297 to 1515</p></div>
+  </div>
+  <div class="minis"><figure class="mini"><img src="img/obras/joconde.webp" alt="Mona Lisa"></figure><figure class="mini"><img src="img/obras/printemps-botticelli.webp" alt="Primavera"></figure><figure class="mini"><img src="img/obras/dame-hermine.webp" alt="Lady with an Ermine"></figure><figure class="mini"><img src="img/obras/lievre-durer.webp" alt="Young Hare"></figure></div>
+  <div class="list"><ol><li><b>1</b><span class="t">Saint Francis Preaching to the Birds</span><span class="a">Giotto</span></li><li><b>2</b><span class="t">The Flight into Egypt</span><span class="a">Giotto</span></li><li><b>3</b><span class="t">The Adoration of the Magi</span><span class="a">Giotto</span></li><li><b>4</b><span class="t">The Annunciation</span><span class="a">Fra Angelico</span></li><li><b>5</b><span class="t">The Baptism of Christ</span><span class="a">Piero della Francesca</span></li><li><b>6</b><span class="t">The Annunciation</span><span class="a">Leonardo da Vinci</span></li></ol><ol><li><b>7</b><span class="t">Primavera</span><span class="a">Sandro Botticelli</span></li><li><b>8</b><span class="t">The Delivery of the Keys</span><span class="a">Perugino</span></li><li><b>9</b><span class="t">Lady with an Ermine</span><span class="a">Leonardo da Vinci</span></li><li><b>10</b><span class="t">Young Hare</span><span class="a">Albrecht Dürer</span></li><li><b>11</b><span class="t">Mona Lisa</span><span class="a">Leonardo da Vinci</span></li><li><b>12</b><span class="t">Rhinoceros</span><span class="a">Albrecht Dürer</span></li></ol></div>
+</section>
+<section class="page divider" style="--c:#d62828">
+  <div class="tab"><span>2 · Masters of the 16th and 17th centuries</span></div>
+  <div class="head">
+    <div class="num">2</div>
+    <div><h2 class="white">Masters of the 16th and 17th centuries</h2><p>Sheets 13–22 · 1548 to c. 1665</p></div>
+  </div>
+  <div class="minis"><figure class="mini"><img src="img/obras/tour-babel.webp" alt="The Tower of Babel"></figure><figure class="mini"><img src="img/obras/ete-arcimboldo.webp" alt="Summer"></figure><figure class="mini"><img src="img/obras/laitiere.webp" alt="The Milkmaid"></figure><figure class="mini"><img src="img/obras/jeune-fille-perle.webp" alt="Girl with a Pearl Earring"></figure></div>
+  <div class="list"><ol><li><b>13</b><span class="t">Charles V at Mühlberg</span><span class="a">Titian</span></li><li><b>14</b><span class="t">The Tower of Babel</span><span class="a">Pieter Bruegel the Elder</span></li><li><b>15</b><span class="t">The Wedding at Cana</span><span class="a">Paolo Veronese</span></li><li><b>16</b><span class="t">The Hunters in the Snow</span><span class="a">Pieter Bruegel the Elder</span></li><li><b>17</b><span class="t">Summer</span><span class="a">Giuseppe Arcimboldo</span></li></ol><ol><li><b>18</b><span class="t">Basket of Fruit</span><span class="a">Caravaggio</span></li><li><b>19</b><span class="t">Winter Landscape with Ice Skaters</span><span class="a">Hendrick Avercamp</span></li><li><b>20</b><span class="t">The Milkmaid</span><span class="a">Johannes Vermeer</span></li><li><b>21</b><span class="t">The Courtyard of a House in Delft</span><span class="a">Pieter de Hooch</span></li><li><b>22</b><span class="t">Girl with a Pearl Earring</span><span class="a">Johannes Vermeer</span></li></ol></div>
+</section>
+<section class="page divider" style="--c:#1e3a8a">
+  <div class="tab"><span>3 · Venice, London and the Romantics</span></div>
+  <div class="head">
+    <div class="num">3</div>
+    <div><h2 class="white">Venice, London and the Romantics</h2><p>Sheets 23–33 · c. 1730 to 1821</p></div>
+  </div>
+  <div class="minis"><figure class="mini"><img src="img/obras/place-saint-marc.webp" alt="Piazza San Marco"></figure><figure class="mini"><img src="img/obras/bulles-savon.webp" alt="Soap Bubbles"></figure><figure class="mini"><img src="img/obras/whistlejacket.webp" alt="Whistlejacket"></figure><figure class="mini"><img src="img/obras/mer-nuages.webp" alt="Wanderer above the Sea of Fog"></figure></div>
+  <div class="list"><ol><li><b>23</b><span class="t">Piazza San Marco</span><span class="a">Canaletto</span></li><li><b>24</b><span class="t">The Return of the Bucentaur</span><span class="a">Canaletto</span></li><li><b>25</b><span class="t">The Grand Canal and the Salute</span><span class="a">Canaletto</span></li><li><b>26</b><span class="t">Soap Bubbles</span><span class="a">Jean-Siméon Chardin</span></li><li><b>27</b><span class="t">The House of Cards</span><span class="a">Jean-Siméon Chardin</span></li><li><b>28</b><span class="t">A Regatta on the Grand Canal</span><span class="a">Canaletto</span></li></ol><ol><li><b>29</b><span class="t">The Thames in London</span><span class="a">Canaletto</span></li><li><b>30</b><span class="t">Whistlejacket</span><span class="a">George Stubbs</span></li><li><b>31</b><span class="t">The Blue Boy</span><span class="a">Thomas Gainsborough</span></li><li><b>32</b><span class="t">Wanderer above the Sea of Fog</span><span class="a">Caspar David Friedrich</span></li><li><b>33</b><span class="t">The Hay Wain</span><span class="a">John Constable</span></li></ol></div>
+</section>
+<section class="page divider" style="--c:#2f7d3a">
+  <div class="tab"><span>4 · Great landscapes of the 19th century</span></div>
+  <div class="head">
+    <div class="num">4</div>
+    <div><h2 class="white">Great landscapes of the 19th century</h2><p>Sheets 34–49 · c. 1831 to 1869</p></div>
+  </div>
+  <div class="minis"><figure class="mini"><img src="img/obras/grande-vague.webp" alt="The Great Wave"></figure><figure class="mini"><img src="img/obras/temeraire.webp" alt="The Fighting Temeraire"></figure><figure class="mini"><img src="img/obras/glaneuses.webp" alt="The Gleaners"></figure><figure class="mini"><img src="img/obras/la-pie.webp" alt="The Magpie"></figure></div>
+  <div class="list"><ol><li><b>34</b><span class="t">Red Fuji</span><span class="a">Katsushika Hokusai</span></li><li><b>35</b><span class="t">The Great Wave</span><span class="a">Katsushika Hokusai</span></li><li><b>36</b><span class="t">The Oxbow</span><span class="a">Thomas Cole</span></li><li><b>37</b><span class="t">The Fighting Temeraire</span><span class="a">J. M. W. Turner</span></li><li><b>38</b><span class="t">Rain, Steam and Speed</span><span class="a">J. M. W. Turner</span></li><li><b>39</b><span class="t">The Monarch of the Glen</span><span class="a">Edwin Landseer</span></li><li><b>40</b><span class="t">The Meeting</span><span class="a">Gustave Courbet</span></li><li><b>41</b><span class="t">Sudden Shower over Shin-Ohashi Bridge</span><span class="a">Utagawa Hiroshige</span></li></ol><ol><li><b>42</b><span class="t">Plum Park in Kameido</span><span class="a">Utagawa Hiroshige</span></li><li><b>43</b><span class="t">The Gleaners</span><span class="a">Jean-François Millet</span></li><li><b>44</b><span class="t">Niagara</span><span class="a">Frederic Edwin Church</span></li><li><b>45</b><span class="t">Souvenir of Mortefontaine</span><span class="a">Camille Corot</span></li><li><b>46</b><span class="t">Beach at Trouville</span><span class="a">Eugène Boudin</span></li><li><b>47</b><span class="t">The Fifer</span><span class="a">Édouard Manet</span></li><li><b>48</b><span class="t">Among the Sierra Nevada, California</span><span class="a">Albert Bierstadt</span></li><li><b>49</b><span class="t">The Magpie</span><span class="a">Claude Monet</span></li></ol></div>
+</section>
+<section class="page divider" style="--c:#e8822a">
+  <div class="tab"><span>5 · The Impressionists</span></div>
+  <div class="head">
+    <div class="num">5</div>
+    <div><h2 class="white">The Impressionists</h2><p>Sheets 50–66 · 1871 to 1886</p></div>
+  </div>
+  <div class="minis"><figure class="mini"><img src="img/obras/impression-soleil.webp" alt="Impression, Sunrise"></figure><figure class="mini"><img src="img/obras/moulin-galette.webp" alt="Dance at Le Moulin de la Galette"></figure><figure class="mini"><img src="img/obras/classe-danse.webp" alt="The Dance Class"></figure><figure class="mini"><img src="img/obras/grande-jatte.webp" alt="A Sunday on La Grande Jatte"></figure></div>
+  <div class="list"><ol><li><b>50</b><span class="t">Whistler&#x27;s Mother</span><span class="a">James McNeill Whistler</span></li><li><b>51</b><span class="t">Impression, Sunrise</span><span class="a">Claude Monet</span></li><li><b>52</b><span class="t">The Cradle</span><span class="a">Berthe Morisot</span></li><li><b>53</b><span class="t">Snap the Whip</span><span class="a">Winslow Homer</span></li><li><b>54</b><span class="t">Poppies</span><span class="a">Claude Monet</span></li><li><b>55</b><span class="t">The Dance Class</span><span class="a">Edgar Degas</span></li><li><b>56</b><span class="t">The Butterfly Hunt</span><span class="a">Berthe Morisot</span></li><li><b>57</b><span class="t">Woman with a Parasol</span><span class="a">Claude Monet</span></li><li><b>58</b><span class="t">Dance at Le Moulin de la Galette</span><span class="a">Pierre-Auguste Renoir</span></li></ol><ol><li><b>59</b><span class="t">Flood at Port-Marly</span><span class="a">Alfred Sisley</span></li><li><b>60</b><span class="t">Paris Street; Rainy Day</span><span class="a">Gustave Caillebotte</span></li><li><b>61</b><span class="t">Little Girl in a Blue Armchair</span><span class="a">Mary Cassatt</span></li><li><b>62</b><span class="t">The Golden Stairs</span><span class="a">Edward Burne-Jones</span></li><li><b>63</b><span class="t">Luncheon of the Boating Party</span><span class="a">Pierre-Auguste Renoir</span></li><li><b>64</b><span class="t">A Sunday on La Grande Jatte</span><span class="a">Georges Seurat</span></li><li><b>65</b><span class="t">The Young Shepherdess</span><span class="a">William Bouguereau</span></li><li><b>66</b><span class="t">Carnation, Lily, Lily, Rose</span><span class="a">John Singer Sargent</span></li></ol></div>
+</section>
+<section class="page divider" style="--c:#1e3a8a">
+  <div class="tab"><span>6 · Van Gogh and his friends</span></div>
+  <div class="head">
+    <div class="num">6</div>
+    <div><h2 class="white">Van Gogh and his friends</h2><p>Sheets 67–85 · 1888 to 1906</p></div>
+  </div>
+  <div class="minis"><figure class="mini"><img src="img/obras/tournesols.webp" alt="Sunflowers"></figure><figure class="mini"><img src="img/obras/nuit-etoilee.webp" alt="The Starry Night"></figure><figure class="mini"><img src="img/obras/le-cri.webp" alt="The Scream"></figure><figure class="mini"><img src="img/obras/nympheas.webp" alt="Water Lilies"></figure></div>
+  <div class="list"><ol><li><b>67</b><span class="t">Sunflowers</span><span class="a">Vincent van Gogh</span></li><li><b>68</b><span class="t">Cafe Terrace at Night</span><span class="a">Vincent van Gogh</span></li><li><b>69</b><span class="t">The Bedroom</span><span class="a">Vincent van Gogh</span></li><li><b>70</b><span class="t">Irises</span><span class="a">Vincent van Gogh</span></li><li><b>71</b><span class="t">Wheat Field with Cypresses</span><span class="a">Vincent van Gogh</span></li><li><b>72</b><span class="t">The Starry Night</span><span class="a">Vincent van Gogh</span></li><li><b>73</b><span class="t">Almond Blossoms</span><span class="a">Vincent van Gogh</span></li><li><b>74</b><span class="t">Haystacks</span><span class="a">Claude Monet</span></li><li><b>75</b><span class="t">Surprised!</span><span class="a">Henri Rousseau</span></li><li><b>76</b><span class="t">The Circus</span><span class="a">Georges Seurat</span></li></ol><ol><li><b>77</b><span class="t">The Scream</span><span class="a">Edvard Munch</span></li><li><b>78</b><span class="t">The Child&#x27;s Bath</span><span class="a">Mary Cassatt</span></li><li><b>79</b><span class="t">Breakfast under the Big Birch</span><span class="a">Carl Larsson</span></li><li><b>80</b><span class="t">Boulevard Montmartre at Night</span><span class="a">Camille Pissarro</span></li><li><b>81</b><span class="t">The Japanese Footbridge</span><span class="a">Claude Monet</span></li><li><b>82</b><span class="t">Apples and Oranges</span><span class="a">Paul Cézanne</span></li><li><b>83</b><span class="t">The Port of Saint-Tropez</span><span class="a">Paul Signac</span></li><li><b>84</b><span class="t">Mont Sainte-Victoire</span><span class="a">Paul Cézanne</span></li><li><b>85</b><span class="t">Water Lilies</span><span class="a">Claude Monet</span></li></ol></div>
+</section>
+<section class="page divider" style="--c:#7442b5">
+  <div class="tab"><span>7 · Modern art</span></div>
+  <div class="head">
+    <div class="num">7</div>
+    <div><h2 class="white">Modern art</h2><p>Sheets 86–100 · 1909 to 1953</p></div>
+  </div>
+  <div class="minis"><figure class="mini"><img src="img/obras/arbre-vie.webp" alt="The Tree of Life"></figure><figure class="mini"><img src="img/obras/grands-chevaux-bleus.webp" alt="The Large Blue Horses"></figure><figure class="mini"><img src="img/obras/composition-rjb.webp" alt="Composition with Red, Yellow and Blue"></figure><figure class="mini"><img src="img/obras/escargot.webp" alt="The Snail"></figure></div>
+  <div class="list"><ol><li><b>86</b><span class="t">The Tree of Life</span><span class="a">Gustav Klimt</span></li><li><b>87</b><span class="t">Walk on the Beach</span><span class="a">Joaquín Sorolla</span></li><li><b>88</b><span class="t">The Large Blue Horses</span><span class="a">Franz Marc</span></li><li><b>89</b><span class="t">The Yellow Cow</span><span class="a">Franz Marc</span></li><li><b>90</b><span class="t">Blue Horse I</span><span class="a">Franz Marc</span></li><li><b>91</b><span class="t">Goldfish</span><span class="a">Henri Matisse</span></li><li><b>92</b><span class="t">Two Cats, Blue and Yellow</span><span class="a">Franz Marc</span></li><li><b>93</b><span class="t">Senecio</span><span class="a">Paul Klee</span></li></ol><ol><li><b>94</b><span class="t">Composition VIII</span><span class="a">Wassily Kandinsky</span></li><li><b>95</b><span class="t">Yellow-Red-Blue</span><span class="a">Wassily Kandinsky</span></li><li><b>96</b><span class="t">Castle and Sun</span><span class="a">Paul Klee</span></li><li><b>97</b><span class="t">Cat and Bird</span><span class="a">Paul Klee</span></li><li><b>98</b><span class="t">Composition with Red, Yellow and Blue</span><span class="a">Piet Mondrian</span></li><li><b>99</b><span class="t">Broadway Boogie Woogie</span><span class="a">Piet Mondrian</span></li><li><b>100</b><span class="t">The Snail</span><span class="a">Henri Matisse</span></li></ol></div>
+</section>
+<section class="page gb spines">
+  <h2 class="white">Binder spines</h2>
+  <div class="spine-row"><p class="lbl">Spine for a 1-inch binder · cut along the dotted line</p>
+    <div class="spine" style="height:25.4mm"><svg class="sp-star" viewBox="0 0 24 24"><defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g4)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg><span class="s-name white"><span data-name-s>My</span> Art Book</span>
+      <span class="s-sub">100 Masterpieces to Color</span><svg class="sp-star" viewBox="0 0 24 24"><defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g5)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></div></div>
+  <div class="spine-row"><p class="lbl">Spine for a 1½-inch binder · cut along the dotted line</p>
+    <div class="spine" style="height:38.1mm"><svg class="sp-star" viewBox="0 0 24 24"><defs><linearGradient id="g6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g6)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg><span class="s-name white"><span data-name-s>My</span> Art Book</span>
+      <span class="s-sub">100 Masterpieces to Color</span><svg class="sp-star" viewBox="0 0 24 24"><defs><linearGradient id="g7" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g7)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></div></div>
+  <div class="spine-row"><p class="lbl">Spine for a 2-inch binder · cut along the dotted line</p>
+    <div class="spine" style="height:50.8mm"><svg class="sp-star" viewBox="0 0 24 24"><defs><linearGradient id="g8" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g8)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg><span class="s-name white"><span data-name-s>My</span> Art Book</span>
+      <span class="s-sub">100 Masterpieces to Color</span><svg class="sp-star" viewBox="0 0 24 24"><defs><linearGradient id="g9" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g9)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></div></div>
+</section>
+<section class="page gb tags">
+  <h2 class="white">Gift tags <small>· cut out, punch the hole and tie with a ribbon</small></h2>
+  <div class="grid"><div class="tag x"><i class="hole"></i><svg class="holly" viewBox="0 0 60 30"><path fill="#2f7d3a" d="M30 15C22 3 10 6 4 2c2 6-2 10 2 14 4-2 8 2 10-2 4 4 10 2 14 1zM30 15c8-12 20-9 26-13-2 6 2 10-2 14-4-2-8 2-10-2-4 4-10 2-14 1z"/><circle cx="26" cy="18" r="4" fill="#d62828"/><circle cx="34" cy="18" r="4" fill="#d62828"/><circle cx="30" cy="12" r="4" fill="#d62828"/></svg><p class="t-top white">Merry Christmas!</p>
+      <p class="t-line">To: <b data-name data-empty="">&nbsp;</b><span class="line"></span></p>
+      <p class="t-line">From: <span class="line"></span></p></div><div class="tag x"><i class="hole"></i><svg class="holly" viewBox="0 0 60 30"><path fill="#2f7d3a" d="M30 15C22 3 10 6 4 2c2 6-2 10 2 14 4-2 8 2 10-2 4 4 10 2 14 1zM30 15c8-12 20-9 26-13-2 6 2 10-2 14-4-2-8 2-10-2-4 4-10 2-14 1z"/><circle cx="26" cy="18" r="4" fill="#d62828"/><circle cx="34" cy="18" r="4" fill="#d62828"/><circle cx="30" cy="12" r="4" fill="#d62828"/></svg><p class="t-top white">Merry Christmas!</p>
+      <p class="t-line">To: <b data-name data-empty="">&nbsp;</b><span class="line"></span></p>
+      <p class="t-line">From: <span class="line"></span></p></div><div class="tag"><i class="hole"></i><svg class="tg-star" viewBox="0 0 24 24"><defs><linearGradient id="g10" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g10)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg><p class="t-top white">A gift for a little artist</p>
+      <p class="t-line">To: <b data-name data-empty="">&nbsp;</b><span class="line"></span></p>
+      <p class="t-line">From: <span class="line"></span></p></div><div class="tag"><i class="hole"></i><svg class="tg-star" viewBox="0 0 24 24"><defs><linearGradient id="g11" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g11)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg><p class="t-top white">A gift for a little artist</p>
+      <p class="t-line">To: <b data-name data-empty="">&nbsp;</b><span class="line"></span></p>
+      <p class="t-line">From: <span class="line"></span></p></div></div>
+</section>
+<section class="page back">
+  <img class="bg" src="img/cover-girl.webp" alt="">
+  <div class="veil"></div>
+  <div class="box">
+    <p class="kick">The end… for now!</p>
+    <div class="nm white" data-fit><span data-name-s>My</span> Art Book</div>
+    <div class="gdiv"><svg class="gstar" viewBox="0 0 24 24"><defs><linearGradient id="g12" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a7418"/><stop offset=".35" stop-color="#f6dd8e"/><stop offset=".55" stop-color="#c99a2e"/><stop offset=".75" stop-color="#fff2bd"/><stop offset="1" stop-color="#a8801f"/></linearGradient></defs><path fill="url(#g12)" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg></div>
+    <p class="facts">100 masterpieces · 60 artists · from Giotto to Matisse</p>
+    <div class="dates">
+      <p>Started on <span class="line"></span></p>
+      <p>Finished on <span class="line"></span></p>
+      <p>My favorite masterpiece: <span class="line long"></span></p>
+    </div>
+  </div>
+</section>
+<section class="page gb guide">
+  <h2 class="white">How to make your art book</h2>
+  <ol><li><b class="n">1</b><div><h3>Print</h3><p>Print your Little Artists book and this kit with the same settings: landscape, “fit to page”. Thicker paper (cardstock) makes the cover and dividers last longer.</p></div></li><li><b class="n">2</b><div><h3>Choose how to bind it</h3><p>A 1-inch 3-ring binder holds the whole book. You can also use a 3-hole punch and a folder with brass fasteners, or ask a copy shop to spiral-bind it.</p></div></li><li><b class="n">3</b><div><h3>Put it in order</h3><p>Front cover · “This book belongs to” · the dedication page if it is a gift · then each divider in front of its sheets (1 to 7) · back cover at the end.</p></div></li><li><b class="n">4</b><div><h3>Finish the binder</h3><p>Slide the cover into the clear front pocket and cut the spine that fits your binder.</p></div></li><li><b class="n">5</b><div><h3>Keep it growing</h3><p>Color the sheets in any order and put each one back in its place. One day, the whole book is done!</p></div></li></ol>
+</section>
+</div>
+<script>(function () {
+  var input = document.getElementById('name');
+  var KEY = 'my-art-book-name';
+  function clean(s) { return s.replace(/\s+/g, ' ').trim(); }
+  function fit() {
+    // el texto de [data-fit] se achica hasta entrar en el ancho de su caja
+    document.querySelectorAll('[data-fit]').forEach(function (el) {
+      el.style.fontSize = '';
+      var size = parseFloat(getComputedStyle(el).fontSize), r = document.createRange();
+      r.selectNodeContents(el);
+      var zoom = parseFloat(getComputedStyle(el.closest('.page')).zoom) || 1;
+      while (r.getBoundingClientRect().width / zoom > el.clientWidth && size > 14) { size -= 2; el.style.fontSize = size + 'px'; }
+    });
+  }
+  function apply() {
+    var n = clean(input.value);
+    document.querySelectorAll('[data-name]').forEach(function (el) {
+      el.textContent = n || el.getAttribute('data-empty') || '';
+    });
+    document.querySelectorAll('[data-name-s]').forEach(function (el) { el.textContent = n ? n + '’s' : 'My'; });
+    try { localStorage.setItem(KEY, n); } catch (e) {}
+    fit();
+  }
+  function zoom() {
+    var w = 297 * 96 / 25.4;
+    document.documentElement.style.setProperty('--z', Math.min(1, (window.innerWidth - 24) / w));
+    fit();
+  }
+  var q = new URLSearchParams(location.search).get('name');
+  try { input.value = q || localStorage.getItem(KEY) || ''; } catch (e) { input.value = q || ''; }
+  input.addEventListener('input', apply);
+  document.getElementById('print').addEventListener('click', function () { window.print(); });
+  window.addEventListener('resize', zoom);
+  window.addEventListener('beforeprint', function () { document.documentElement.style.setProperty('--z', 1); fit(); });
+  window.addEventListener('afterprint', zoom);
+  zoom(); apply();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+})();
+</script>
+</body>
+</html>
