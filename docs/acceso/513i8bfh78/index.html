@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Vizuális Triggerpont-atlasz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* HUB DE ENTREGA: la única URL que recibe el comprador. Sin OTOs, sin contactos, noindex. */
+:root{--bg:#f6f8fa;--paper:#ffffff;--ink:#1d2733;--ink-soft:#566273;--accent:#d0473a;--accent-dark:#173f5f;--line:#d3dfea}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:'Inter',-apple-system,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Inter',Georgia,serif;line-height:1.15;letter-spacing:-.01em}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+.hero{background:linear-gradient(160deg,var(--accent-dark),var(--accent));color:var(--paper);padding:48px 0 64px;text-align:center}
+.hero .kicker{display:inline-block;border:1px solid rgba(255,255,255,.5);border-radius:99px;padding:5px 14px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,6vw,48px);margin-bottom:10px}
+.hero p{font-size:18px;opacity:.93;max-width:640px;margin:0 auto}
+.stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}
+.stats span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:99px;padding:8px 16px;font-weight:700;font-size:15px}
+.core{position:relative;margin:-36px auto 36px;background:var(--paper);border:2px solid var(--accent);border-radius:20px;padding:26px;display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.10)}
+.core img{width:100%;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18);display:block}
+.core .ph{aspect-ratio:2/3;border-radius:10px;background:linear-gradient(160deg,var(--accent),var(--accent-dark))}
+.tag{display:inline-block;background:var(--accent);color:var(--paper);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.core h2{font-size:clamp(22px,4vw,32px);margin-bottom:8px}
+.core p{color:var(--ink-soft);margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 26px;border-radius:12px;background:var(--accent);color:var(--paper);font-weight:800;font-size:17px;text-decoration:none;box-shadow:0 4px 0 var(--accent-dark)}
+.btn:hover{filter:brightness(1.05)}
+.sec{margin:0 0 40px}
+.sec h2{font-size:clamp(22px,4vw,30px);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px;text-decoration:none;transition:transform .12s,border-color .12s}
+.card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.card .n{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.card h3{font-size:19px}
+.card p{color:var(--ink-soft);font-size:15px;flex:1}
+.card .go{font-weight:800;color:var(--accent-dark)}
+.card .btn{width:100%;min-height:46px;padding:10px 16px;font-size:16px}
+.acciones{display:inline-flex;flex-direction:column;align-items:stretch}
+.card .acciones{display:flex}
+.ver{display:block;margin-top:10px;font-weight:800;color:var(--accent-dark);text-decoration:none;text-align:center}
+.card .ver{margin-top:8px}
+.pasos{counter-reset:p;list-style:none;display:grid;gap:10px}
+.pasos li{counter-increment:p;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px 14px 58px;position:relative}
+.pasos li::before{content:counter(p);position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:50%;background:var(--accent);color:var(--paper);font-weight:800;display:flex;align-items:center;justify-content:center}
+.foot{text-align:center;color:var(--ink-soft);font-size:13px;padding:10px 0 40px}
+@media (max-width:640px){.core{grid-template-columns:1fr;text-align:center;padding:20px}.core img,.core .ph{max-width:170px;margin:0 auto}.btn{width:100%}.acciones{display:flex}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">Üdvözlünk · Vizuális Triggerpont-atlasz</span>
+    <h1>Vizuális Triggerpont-atlasz</h1>
+    <p>Itt van minden, amit megvásároltál. Töltsd le a PDF-eket a telefonodra, a tabletedre vagy a számítógépedre, és nyomtasd ki, ha papíron szeretnéd.</p>
+    <div class="stats"><span>104 kártya</span><span>6 testtáj</span><span>5 bónusz</span></div>
+  </div>
+</header>
+<main class="wrap">
+  <section class="sec" style="margin-top:32px"><h2>Az atlasz</h2><div class="grid"><div class="card"><img class="mini" src="img/atlasz.webp" alt="Vizuális Triggerpont-atlasz" loading="lazy"><span class="n">Teljes atlasz · 117 oldal</span><h3>Vizuális Triggerpont-atlasz</h3><p>Mind a 104 kártya egy fájlban, tartalomjegyzékkel és magyar–latin tárgymutatóval.</p><div class="acciones"><a class="btn" href="../../vizualis-triggerpont-atlasz/jy9znbsrgx/vizualis-triggerpont-atlasz.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../vizualis-triggerpont-atlasz/jy9znbsrgx/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/zona-1.webp" alt="Fej, arc és állkapocs" loading="lazy"><span class="n">1. testtáj · 1–10. kártya</span><h3>Fej, arc és állkapocs</h3><p>Csak ennek a testtájnak a kártyái, ha gyorsan akarod megnyitni a telefonodon.</p><div class="acciones"><a class="btn" href="../../1-fej-arc-allkapocs/eehfr8wwpi/1-fej-arc-allkapocs.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../1-fej-arc-allkapocs/eehfr8wwpi/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/zona-2.webp" alt="Tarkó és nyak" loading="lazy"><span class="n">2. testtáj · 11–23. kártya</span><h3>Tarkó és nyak</h3><p>Csak ennek a testtájnak a kártyái, ha gyorsan akarod megnyitni a telefonodon.</p><div class="acciones"><a class="btn" href="../../2-tarko-nyak/e7qspia91b/2-tarko-nyak.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../2-tarko-nyak/e7qspia91b/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/zona-3.webp" alt="Vállak, felkarok, alkarok és kezek" loading="lazy"><span class="n">3. testtáj · 24–59. kártya</span><h3>Vállak, felkarok, alkarok és kezek</h3><p>Csak ennek a testtájnak a kártyái, ha gyorsan akarod megnyitni a telefonodon.</p><div class="acciones"><a class="btn" href="../../3-vallak-karok-kezek/yveim8tss4/3-vallak-karok-kezek.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../3-vallak-karok-kezek/yveim8tss4/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/zona-4.webp" alt="Hát: háti és ágyéki szakasz" loading="lazy"><span class="n">4. testtáj · 60–70. kártya</span><h3>Hát: háti és ágyéki szakasz</h3><p>Csak ennek a testtájnak a kártyái, ha gyorsan akarod megnyitni a telefonodon.</p><div class="acciones"><a class="btn" href="../../4-hat/0cw7h8uybk/4-hat.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../4-hat/0cw7h8uybk/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/zona-5.webp" alt="Medence, csípő és far" loading="lazy"><span class="n">5. testtáj · 71–82. kártya</span><h3>Medence, csípő és far</h3><p>Csak ennek a testtájnak a kártyái, ha gyorsan akarod megnyitni a telefonodon.</p><div class="acciones"><a class="btn" href="../../5-medence-csipo-far/legoo9fnz4/5-medence-csipo-far.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../5-medence-csipo-far/legoo9fnz4/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/zona-6.webp" alt="Combok, térdek, vádlik, bokák és lábfejek" loading="lazy"><span class="n">6. testtáj · 83–104. kártya</span><h3>Combok, térdek, vádlik, bokák és lábfejek</h3><p>Csak ennek a testtájnak a kártyái, ha gyorsan akarod megnyitni a telefonodon.</p><div class="acciones"><a class="btn" href="../../6-combok-terdek-labszarak-labfejek/m1928fdcq4/6-combok-terdek-labszarak-labfejek.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../6-combok-terdek-labszarak-labfejek/m1928fdcq4/" target="_blank" rel="noopener">Megnyitás →</a></div></div></div></section>
+  <section class="sec"><h2>A bónuszaid</h2><div class="grid"><div class="card"><img class="mini" src="img/bonusz-1.webp" alt="10 perces rutin a nyakra és a vállakra" loading="lazy"><span class="n">Bónusz 1</span><h3>10 perces rutin a nyakra és a vállakra</h3><p>Esti sorrend nyolc ponttal, minden ponthoz megadott idővel.</p><div class="acciones"><a class="btn" href="../../10-perces-rutin-a-nyakra-es-a-vallakra/03iskczb0v/1-bonusz-10-perces-rutin-nyak-vall.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../10-perces-rutin-a-nyakra-es-a-vallakra/03iskczb0v/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/bonusz-2.webp" alt="Fájdalomtérkép: a fájó ponttól a megfelelő kártyáig" loading="lazy"><span class="n">Bónusz 2</span><h3>Fájdalomtérkép: a fájó ponttól a megfelelő kártyáig</h3><p>Jelöld meg, hol fáj, és rögtön látod, melyik kártyákkal kezdd.</p><div class="acciones"><a class="btn" href="../../fajdalomterkep-a-fajo-ponttol-a-megfelel/7f5qieqbw5/2-bonusz-fajdalomterkep.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../fajdalomterkep-a-fajo-ponttol-a-megfelel/7f5qieqbw5/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/bonusz-3.webp" alt="Önkezelés labdával és hengerrel" loading="lazy"><span class="n">Bónusz 3</span><h3>Önkezelés labdával és hengerrel</h3><p>25 testhelyzet teniszlabdával, masszázslabdával és hengerrel.</p><div class="acciones"><a class="btn" href="../../onkezeles-labdaval-es-hengerrel/8khlb1rzse/3-bonusz-onkezeles-labdaval-es-hengerrel.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../onkezeles-labdaval-es-hengerrel/8khlb1rzse/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/bonusz-4.webp" alt="Fájdalomnapló és betegfelvételi lap" loading="lazy"><span class="n">Bónusz 4</span><h3>Fájdalomnapló és betegfelvételi lap</h3><p>Öthetes napló és kitölthető lap a terapeutának.</p><div class="acciones"><a class="btn" href="../../fajdalomnaplo-es-betegfelveteli-lap/2mmh7cam7j/4-bonusz-fajdalomnaplo-es-betegfelveteli-lap.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../fajdalomnaplo-es-betegfelveteli-lap/2mmh7cam7j/" target="_blank" rel="noopener">Megnyitás →</a></div></div><div class="card"><img class="mini" src="img/bonusz-5.webp" alt="Ergonómia az íróasztalnál és alvási testhelyzet" loading="lazy"><span class="n">Bónusz 5</span><h3>Ergonómia az íróasztalnál és alvási testhelyzet</h3><p>Ülés, telefon, emelés, alvás és párna: így tehermentesítsd az izmaidat.</p><div class="acciones"><a class="btn" href="../../ergonomia-az-iroasztalnal-es-alvasi-test/dn6dtugk5o/5-bonusz-ergonomia-es-alvasi-testhelyzet.pdf" download>⬇ PDF letöltése</a><a class="ver" href="../../ergonomia-az-iroasztalnal-es-alvasi-test/dn6dtugk5o/" target="_blank" rel="noopener">Megnyitás →</a></div></div></div></section>
+  <section class="sec"><h2>Hol kezdd?</h2><ol class="pasos"><li>Töltsd le a teljes atlaszt (vagy csak a fájó testtáj PDF-jét).</li><li>Olvasd el az atlasz 2. oldalát: hogyan használd, és mire figyelj.</li><li>Ha nem tudod, hol kezdd, nyisd meg a Fájdalomtérképet (2. bónusz).</li><li>Este csináld végig a 10 perces rutint a nyakra és a vállakra (1. bónusz).</li></ol></section>
+  <p class="foot">Csak személyes használatra. Továbbértékesítése és terjesztése tilos.</p>
+</main>
+</body>
+</html>
